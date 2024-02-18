@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "142258112744",
+    "project_id": "basakhuji-e445e",
+    "storage_bucket": "basakhuji-e445e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:142258112744:android:03c6bd94641f749ceb215d",
+        "android_client_info": {
+          "package_name": "com.example.basakhuji"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBz3KXIYfuQYfUC8vqZfBqDUYdsgMj0tkY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
