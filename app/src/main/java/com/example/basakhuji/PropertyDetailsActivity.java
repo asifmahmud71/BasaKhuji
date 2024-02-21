@@ -171,4 +171,3 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         Toast.makeText(this, "Disliked!", Toast.LENGTH_SHORT).show();
     }
 }
-

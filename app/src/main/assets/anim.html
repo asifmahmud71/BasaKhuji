@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Animation</title>
+    <style>
+        /* Define styles for your logo */
+        #logo {
+            width: 200px; /* Adjust width and height as per your logo size */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Replace 'logo.png' with the path to your logo image -->
+    <img id="logo" src="logo.jpg" alt="Your App Logo">
+
+    <!-- Include GSAP library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script>
+        // Define your animation using GSAP
+        
+		
+<!--		gsap.to("#logo", {-->
+<!--            duration: 1.5,-->
+<!--            opacity: 1, // Fade in-->
+<!--            //repeat: -1, // Repeat infinitely-->
+<!--            yoyo: true, // Reverse animation-->
+<!--            ease: "power1.inOut" // Use power1 easing function-->
+<!--        });-->
+<!--		gsap.to("#logo", {-->
+<!--            duration: 3,-->
+<!--            x: "+=200", // Move 200 pixels to the right-->
+<!--            //repeat: -1, // Repeat infinitely-->
+<!--            yoyo: true, // Reverse animation-->
+<!--            ease: "power1.inOut" // Use power1 easing function-->
+<!--        });-->
+		
+		gsap.to("#logo", {
+            duration: 2,
+            rotate: 360, // Rotate 360 degrees
+            repeat: 0, // Repeat infinitely
+            ease: "linear" // Use linear easing function
+        });
+<!--		gsap.to("#logo", {-->
+<!--            duration: 1,-->
+<!--            scale: 1.2, // Scale up to 1.2 times-->
+<!--            yoyo: true, // Reverse animation-->
+<!--            //repeat: -1, // Repeat infinitely-->
+<!--            ease: "power1.inOut" // Use power1 easing function-->
+<!--        });-->
+		
+		
+    </script>
+</body>
+</html>

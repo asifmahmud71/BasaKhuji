@@ -20,6 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/propertyImageView"
+        android:layout_marginTop="20dp"
         android:id="@+id/locationLabel"
         android:text="Location Information"
         android:textSize="20dp"
@@ -86,45 +87,69 @@
         android:textSize="16dp"
         />
 
+<LinearLayout
+    android:id="@+id/linearLikeDislike"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_below="@+id/descriptionTextView"
 
-    <Button
-        android:id="@+id/likeButton"
+    >
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/descriptionTextView"
-        android:layout_marginTop="16dp"
-        android:text="Like" />
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/likeCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="10dp"
+            android:text="Likes: 0" />
+
+        <Button
+            android:id="@+id/likeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Like" />
+
+
+    </LinearLayout>
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+
+    >
+    <TextView
+        android:id="@+id/dislikeCountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="70dp"
+        android:text="Dislikes: 0" />
 
     <Button
         android:id="@+id/dislikeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/likeCountTextView"
+        android:layout_marginHorizontal="60dp"
+        android:layout_marginVertical="18dp"
         android:layout_marginTop="8dp"
         android:text="Dislike" />
 
-    <!-- TextViews for displaying like and dislike counts -->
-    <TextView
-        android:id="@+id/likeCountTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/likeButton"
-        android:layout_marginTop="8dp"
-        android:text="Likes: 0" />
+</LinearLayout>
 
-    <TextView
-        android:id="@+id/dislikeCountTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/dislikeButton"
-        android:layout_marginTop="8dp"
-        android:text="Dislikes: 0" />
+</LinearLayout>
 
     <RatingBar
         android:id="@+id/ratingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/dislikeCountTextView"
+        android:layout_below="@id/linearLikeDislike"
         android:layout_marginTop="16dp"
         android:numStars="5"
         android:stepSize="1"
