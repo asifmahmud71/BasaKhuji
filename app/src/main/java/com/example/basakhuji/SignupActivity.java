@@ -2,7 +2,8 @@ package com.example.basakhuji;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,30 +11,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.chaos.view.PinView;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import java.util.Map;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.auth.FirebaseUser;
-
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
-import java.util.Random;
+import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -59,6 +49,23 @@ public class SignupActivity extends AppCompatActivity {
         signUpButton = findViewById(R.id.signUpButton);
         fullNameEditText = findViewById(R.id.nameEditText);
         loginTextView = findViewById(R.id.loginTextView);
+
+
+        unameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Check username existence in real-time as the user types
+                checkUsernameAvailability(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +108,34 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    private void checkUsernameAvailability(final String username) {
+        db.collection("users")
+                .whereEqualTo("username", username)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            if (!task.getResult().isEmpty()) {
+                                // Username already exists
+                                unameEditText.setError("Username already exists");
+                                // You can also disable the sign-up button or provide other feedback to the user
+                            } else {
+                                // Username is available
+                                // Clear any previous error
+                                unameEditText.setError(null);
+                            }
+                        } else {
+                            // Handle errors
+                            Toast.makeText(SignupActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+
 
     private void sendEmailVerification(FirebaseUser user) {
         user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
