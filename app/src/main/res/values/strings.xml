@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">BasaKhuji</string>
+    <string-array name="category_options">
+        <item>Bachelor</item>
+        <item>Family</item>
+        <item>Sublet</item>
+    </string-array>
+
+    <string-array name="flat_type_options">
+        <item>Seat</item>
+        <item>House</item>
+        <item>Room</item>
+    </string-array>
+    <string-array name="months_array">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
 </resources>

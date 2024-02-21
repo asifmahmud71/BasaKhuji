@@ -121,6 +121,22 @@
         android:textColor="@color/white"
         android:textSize="18sp"/>
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@+id/updateButton"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="22dp"
+        android:onClick="buttonPlayYouTubeVideo"
+        android:text="Play YouTube Video" />
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="395dp"
+        android:layout_height="201dp"
+        android:layout_below="@+id/updateButton"
+        android:layout_marginTop="65dp" />
 
 
 </RelativeLayout>

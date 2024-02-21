@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Location -->
+    <TextView
+        android:id="@+id/locationLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/locationEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/locationLabel"
+        android:layout_marginTop="8dp"
+        android:hint="Enter location"
+        android:inputType="text"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"/>
+
+    <!-- Beds -->
+    <TextView
+        android:id="@+id/bedsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Beds"
+        android:textSize="18sp"
+        android:layout_below="@id/locationEditText"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/bedsEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bedsLabel"
+        android:layout_marginTop="8dp"
+        android:hint="Enter number of beds"
+        android:inputType="number"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"/>
+
+    <!-- Baths -->
+    <TextView
+        android:id="@+id/bathsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Baths"
+        android:textSize="18sp"
+        android:layout_below="@id/bedsEditText"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/bathsEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bathsLabel"
+        android:layout_marginTop="8dp"
+        android:hint="Enter number of baths"
+        android:inputType="number"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"/>
+
+    <!-- Category -->
+    <TextView
+        android:id="@+id/categoryLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Category"
+        android:textSize="18sp"
+        android:layout_below="@id/bathsEditText"
+        android:layout_marginTop="16dp"/>
+
+    <Spinner
+        android:id="@+id/categorySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/categoryLabel"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"/>
+
+
+    <!-- Added Date -->
+    <TextView
+        android:id="@+id/addedDateLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Added Date"
+        android:textSize="18sp"
+        android:layout_below="@id/flatTypeSpinner"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/addedDateTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addedDateLabel"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"
+        android:hint="Select added date"
+        android:clickable="true"
+        android:focusable="false" />
+
+    <!-- Flat Type -->
+    <TextView
+        android:id="@+id/flatTypeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Flat Type"
+        android:textSize="18sp"
+        android:layout_below="@id/categorySpinner"
+        android:layout_marginTop="16dp"/>
+
+    <Spinner
+        android:id="@+id/flatTypeSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/flatTypeLabel"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"/>
+
+    <!-- Available Month -->
+    <TextView
+        android:id="@+id/availableMonthLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Available Month"
+        android:textSize="18sp"
+        android:layout_below="@id/addedDateTextView"
+        android:layout_marginTop="16dp"/>
+
+    <Spinner
+        android:id="@+id/availableMonthSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/availableMonthLabel"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"/>
+
+
+    <!-- Price -->
+    <TextView
+        android:id="@+id/priceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Price"
+        android:textSize="18sp"
+        android:layout_below="@id/availableMonthSpinner"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/priceEditText"
+        android:layout_marginTop="8dp"
+        android:hint="Enter price"
+        android:inputType="number"
+        android:layout_below="@+id/priceLabel"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"/>
+
+
+
+    <!-- Description -->
+    <TextView
+        android:id="@+id/descriptionLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:textSize="18sp"
+        android:layout_below="@id/priceEditText"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/descriptionEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/descriptionLabel"
+        android:layout_marginTop="8dp"
+        android:hint="Enter description"
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        android:background="@drawable/edit_text_background"
+        android:padding="12dp"/>
+
+    <!-- Image Upload -->
+    <TextView
+        android:id="@+id/imageUploadLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload Images"
+        android:textSize="18sp"
+        android:layout_below="@id/descriptionEditText"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/imageUploadButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose Images"
+        android:layout_below="@id/imageUploadLabel"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Image Preview -->
+    <LinearLayout
+        android:id="@+id/imagePreviewLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageUploadButton"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        >
+        <ImageView
+            android:id="@+id/imagePreview"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:src="@mipmap/ic_launcher_round"
+            tools:ignore="ContentDescription" />
+
+        <!-- Image views for preview -->
+        <!-- You can add ImageView elements dynamically here using Java code -->
+
+    </LinearLayout>
+
+    <!-- Submit button -->
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imagePreviewLayout"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="38dp"
+        android:background="@drawable/button_background"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="Submit"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
+
+
+</RelativeLayout>
+</ScrollView>

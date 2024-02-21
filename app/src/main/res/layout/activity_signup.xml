@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:padding="16dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/logoImageView"
@@ -17,8 +21,8 @@
         tools:layout_editor_absoluteY="60dp" />
 
     <LinearLayout
-        android:layout_width="374dp"
-        android:layout_height="716dp"
+        android:layout_width="395dp"
+        android:layout_height="794dp"
         android:layout_below="@+id/logoImageView"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="-2dp"
@@ -98,11 +102,95 @@
             android:padding="10dp"
             android:textColor="@color/black" />
 
+<!--    <LinearLayout-->
+<!--        android:id="@+id/LinearLayout_Email"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:gravity="center"-->
+<!--        android:orientation="vertical">-->
+<!--        &lt;!&ndash; Add EditText for verification code &ndash;&gt;-->
+<!--        <EditText-->
+<!--            android:id="@+id/verificationCodeEditText"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_marginTop="30dp"-->
+<!--            android:background="@drawable/border"-->
+<!--            android:drawablePadding="12dp"-->
+<!--            android:enabled="false"-->
+<!--            android:hint="Verification Code"-->
+<!--            android:inputType="text"-->
+<!--            android:padding="10dp"-->
+<!--            android:textColor="@color/black" /> &lt;!&ndash; Initially disabled &ndash;&gt;-->
+
+<!--        &lt;!&ndash; Add Button to submit verification code &ndash;&gt;-->
+<!--        <Button-->
+<!--            android:id="@+id/verifyButton"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_marginTop="15dp"-->
+<!--            android:enabled="false"-->
+<!--            android:text="VERIFY"-->
+<!--            android:textSize="18dp" /> &lt;!&ndash; Initially disabled &ndash;&gt;-->
+<!--    </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:visibility="gone"-->
+<!--            android:id="@+id/LinearLayout_PinView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:gravity="center"-->
+<!--            android:orientation="vertical">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="OTP verification"-->
+<!--                android:textColor="@android:color/holo_orange_dark"-->
+<!--                android:textSize="25sp"-->
+<!--                android:textStyle="bold" />-->
+
+<!--            <com.chaos.view.PinView-->
+<!--                android:id="@+id/firstPinView"-->
+<!--                style="@style/PinWidget.PinView"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="30dp"-->
+<!--                android:cursorVisible="true"-->
+<!--                android:inputType="number"-->
+<!--                android:itemBackground="#FFFFF7"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="18sp"-->
+<!--                android:textStyle="bold"-->
+<!--                app:cursorColor="@color/black"-->
+<!--                app:cursorWidth="2dp"-->
+<!--                app:hideLineWhenFilled="true"-->
+<!--                app:itemCount="4"-->
+<!--                app:itemHeight="45dp"-->
+<!--                app:itemRadius="4dp"-->
+<!--                app:itemWidth="45dp"-->
+<!--                app:lineColor="@color/black"-->
+<!--                app:lineWidth="2dp"-->
+<!--                app:viewType="rectangle" />-->
+
+<!--            <Button-->
+<!--                android:id="@+id/signup_confirm"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="25dp"-->
+<!--                android:background="@drawable/button_background"-->
+<!--                android:text="Confirm"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="18sp" />-->
+
+<!--        </LinearLayout>-->
+
         <Button
             android:id="@+id/signUpButton"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:text="SIGN UP"
             android:textSize="18dp" />
 
@@ -116,3 +204,4 @@
     </LinearLayout>
 
 </RelativeLayout>
+</ScrollView>

@@ -1,19 +1,21 @@
 package com.example.basakhuji;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 
@@ -21,6 +23,68 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity {
+
+    private String stringJavaScript = "<!DOCTYPE html>\n" +
+            "<html>\n" +
+            "  <body>\n" +
+            "    <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->\n" +
+            "    <div id=\"player\"></div>\n" +
+            "\n" +
+            "    <script>\n" +
+            "      // 2. This code loads the IFrame Player API code asynchronously.\n" +
+            "      var tag = document.createElement('script');\n" +
+            "\n" +
+            "      tag.src = \"https://www.youtube.com/iframe_api\";\n" +
+            "      var firstScriptTag = document.getElementsByTagName('script')[0];\n" +
+
+
+            "      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);\n" +
+            "\n" +
+            "      // 3. This function creates an <iframe> (and YouTube player)\n" +
+            "      //    after the API code downloads.\n" +
+            "      var player;\n" +
+            "      function onYouTubeIframeAPIReady() {\n" +
+            "        player = new YT.Player('player', {\n" +
+            "          height: '195',\n" +
+            "          width: '320',\n" +
+            "          videoId: 'Vey-jmGJVNU',\n" +
+            "          playerVars: {\n" +
+            "            'playsinline': 1\n" +
+            "          },\n" +
+            "          events: {\n" +
+            "            'onReady': onPlayerReady,\n" +
+            "            'onStateChange': onPlayerStateChange\n" +
+            "          }\n" +
+            "        });\n" +
+            "      }\n" +
+            "\n" +
+            "      // 4. The API will call this function when the video player is ready.\n" +
+            "      function onPlayerReady(event) {\n" +
+            "        event.target.playVideo();\n" +
+            "      }\n" +
+            "\n" +
+            "      // 5. The API calls this function when the player's state changes.\n" +
+            "      //    The function indicates that when playing a video (state=1),\n" +
+
+
+            "      //    the player should play for six seconds and then stop.\n" +
+            "      var done = false;\n" +
+            "      function onPlayerStateChange(event) {\n" +
+            "        if (event.data == YT.PlayerState.PLAYING && !done) {\n" +
+            "          setTimeout(stopVideo, 1000000);\n" +
+            "          done = true;\n" +
+            "        }\n" +
+            "      }\n" +
+            "      function stopVideo() {\n" +
+            "        player.stopVideo();\n" +
+            "      }\n" +
+            "    </script>\n" +
+            "  </body>\n" +
+            "</html>";
+
+
+    private WebView webView;
+
 
     private TextView usernameTextView;
     private EditText fullNameEditText, emailEditText, phoneNumberEditText, usernameEditText;
@@ -34,6 +98,9 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_activity);
+
+        webView = findViewById(R.id.webView);
+        webView.getSettings().setJavaScriptEnabled(true);
 
         // Initialize Firebase components
         mAuth = FirebaseAuth.getInstance();
@@ -67,6 +134,10 @@ public class ProfileActivity extends AppCompatActivity {
                 logoutUser();
             }
         });
+    }
+
+    public void buttonPlayYouTubeVideo(View view){
+        webView.loadData(stringJavaScript, "text/html", "utf-8");
     }
 
     @Override
@@ -108,13 +179,14 @@ public class ProfileActivity extends AppCompatActivity {
                         // Get user details from Firestore
                         String fullName = documentSnapshot.getString("fullName");
                         String email = documentSnapshot.getString("email");
-                        String phoneNumber = documentSnapshot.getString("phone");
+                        String phoneNumber = documentSnapshot.getString("phoneNumber");
                         String username = documentSnapshot.getString("username");
 
                         // Update EditText fields with user details
                         fullNameEditText.setText(fullName);
                         emailEditText.setText(email);
                         phoneNumberEditText.setText(phoneNumber);
+                        Log.d(TAG, "phone number is: "+phoneNumber);
                         usernameEditText.setText(username);
                     }
                 });
@@ -123,10 +195,10 @@ public class ProfileActivity extends AppCompatActivity {
     private void updateUserDetails() {
         // Get updated user details from EditText fields
         String fullName = fullNameEditText.getText().toString().trim();
-        String email = emailEditText.getText().toString().trim();
+        //String email = emailEditText.getText().toString().trim();
         String phoneNumber = phoneNumberEditText.getText().toString().trim();
         // Validate fields
-        if (fullName.isEmpty() || email.isEmpty() || phoneNumber.isEmpty()) {
+        if (fullName.isEmpty() || phoneNumber.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -134,8 +206,8 @@ public class ProfileActivity extends AppCompatActivity {
         // Create updated user details map
         Map<String, Object> updatedUser = new HashMap<>();
         updatedUser.put("fullName", fullName);
-        updatedUser.put("email", email);
-        updatedUser.put("phone", phoneNumber);
+        //updatedUser.put("email", email);
+        updatedUser.put("phoneNumber", phoneNumber);
 
         // Update user details in Firestore
         FirebaseUser currentUser = mAuth.getCurrentUser();
