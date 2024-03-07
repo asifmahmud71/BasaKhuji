@@ -1,19 +1,34 @@
 package com.example.basakhuji.Models;
 
-public class PropertyList {
-    private String imageUrl;
-    private String category;
-    private String flatType;
-    private String location;
-    private String price;
-    private String description;
-    private String addedDate;
-    private String availableMonth;
-    private int beds;
-    private int baths;
-    private String id;
-    private int likes;
-    private int dislikes;
+import androidx.annotation.NonNull;
+
+import java.io.Serializable;
+import java.util.List;
+
+public class PropertyList implements Serializable {
+    private String imageUrl, category, flatType, location, price, description, addedDate, availableMonth, id, beds, baths;
+    public PropertyList() {
+        // Default constructor required for Firestore
+    }
+
+
+    private List<String> likedBy;
+    private List<String> dislikedBy;
+
+
+    public PropertyList(String imageUrl, String category, String flatType, String location, String price, String addedDate, String availableMonth, String description, String id, String beds, String baths) {
+        this.id = id;
+        this.price = price;
+        this.category = category;
+        this.flatType = flatType;
+        this.location = location;
+        this.imageUrl = imageUrl;
+        this.addedDate = addedDate;
+        this.availableMonth = availableMonth;
+        this.description = description;
+        this.beds = beds;
+        this.baths = baths;
+    }
 
 
     public String getId() {
@@ -23,44 +38,6 @@ public class PropertyList {
     public void setId(String id) {
         this.id = id;
     }
-
-    public int getLikes() {
-        return likes;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
-
-    public int getDislikes() {
-        return dislikes;
-    }
-
-    public void setDislikes(int dislikes) {
-        this.dislikes = dislikes;
-    }
-
-
-    public PropertyList() {
-        // Default constructor required for Firestore
-    }
-
-
-    public PropertyList(String imageUrl, String category, String flatType, String location, String price,
-                        String description, String addedDate, String availableMonth, String id) {
-        this.imageUrl = imageUrl;
-        this.category = category;
-        this.flatType = flatType;
-        this.location = location;
-        this.price = price;
-        this.description = description;
-        this.addedDate = addedDate;
-        this.availableMonth = availableMonth;
-        this.id = id;
-        this.beds = beds;
-        this.baths = baths;
-    }
-
 
     public String getImageUrl() {
         return imageUrl;
@@ -97,7 +74,8 @@ public class PropertyList {
     public String getPrice() {
         return price;
     }
-    public void setPrice(String price){
+
+    public void setPrice(String price) {
         this.price = price;
     }
 
@@ -125,20 +103,55 @@ public class PropertyList {
         this.availableMonth = availableMonth;
     }
 
-
-    public int getBeds() {
+    public String getBeds() {
         return beds;
     }
 
-    public void setBeds(int beds) {
+    public void setBeds(String beds) {
         this.beds = beds;
     }
 
-    public int getBaths() {
+    public String getBaths() {
         return baths;
     }
 
-    public void setBaths(int baths) {
+    public void setBaths(String baths) {
         this.baths = baths;
     }
+
+
+    public List<String> getLikedBy() {
+        return likedBy;
+    }
+    public void setLikedBy(List<String> likedBy) {
+        this.likedBy = likedBy;
+    }
+
+    public List<String> getDislikedBy() {
+        return dislikedBy;
+    }
+    public void setDislikedBy(List<String> dislikedBy) {
+        this.dislikedBy = dislikedBy;
+    }
+
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "PropertyList{" +
+                "imageUrl='" + imageUrl + '\'' +
+                ", category='" + category + '\'' +
+                ", flatType='" + flatType + '\'' +
+                ", location='" + location + '\'' +
+                ", price='" + price + '\'' +
+                ", description='" + description + '\'' +
+                ", addedDate='" + addedDate + '\'' +
+                ", availableMonth='" + availableMonth + '\'' +
+                ", id='" + id + '\'' +
+                ", beds=" + beds +
+                ", baths=" + baths +
+                '}';
+    }
+
+
 }

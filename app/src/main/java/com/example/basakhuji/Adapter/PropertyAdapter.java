@@ -15,15 +15,17 @@ import com.bumptech.glide.Glide;
 import com.example.basakhuji.Models.PropertyList;
 import com.example.basakhuji.PropertyDetailsActivity;
 import com.example.basakhuji.R;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.PropertyViewHolder> {
 
-    private Context context;
-    private List<PropertyList> propertyList;
-
-    public PropertyAdapter(Context context, List<PropertyList> propertyList) {
+    private final Context context;
+    private final List<PropertyList> propertyList;
+    public PropertyAdapter(Context context, ArrayList<PropertyList> propertyList) {
         this.context = context;
         this.propertyList = propertyList;
     }
@@ -37,40 +39,17 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
 
     @Override
     public void onBindViewHolder(@NonNull PropertyViewHolder holder, int position) {
-        PropertyList property = propertyList.get(position);
+        PropertyList property = propertyList.get(position); // Get the property directly based on the position
 
-        // Combine category and flat type
-        String categoryFlatType = property.getCategory() + " " + property.getFlatType();
-        holder.categoryFlatTypeTextView.setText(categoryFlatType);
+        // Display property details
+        holder.bind(property);
 
-        // Set location
-        holder.locationTextView.setText(property.getLocation());
-
-        // Load image using Glide
-        Glide.with(context)
-                .load(property.getImageUrl())
-                .placeholder(R.drawable.placeholder_image) // Placeholder image while loading
-                .error(R.drawable.error_image) // Error image if loading fails
-                .into(holder.propertyImageView);
-
-        // Set click listener to open PropertyDetailsActivity with property details
-        holder.itemView.setOnClickListener(v -> {
+        // Set click listener for property image
+        holder.propertyImageView.setOnClickListener(v -> {
             Intent intent = new Intent(context, PropertyDetailsActivity.class);
-            intent.putExtra("location", property.getLocation());
-            intent.putExtra("id", property.getId());
-            //intent.putExtra("beds", property.getBeds());
-            //intent.putExtra("baths", property.getBaths());
-            intent.putExtra("category", property.getCategory());
-            intent.putExtra("flatType", property.getFlatType());
-            intent.putExtra("price", property.getPrice());
-            intent.putExtra("imageUrl", property.getImageUrl());
-            intent.putExtra("addedDate", property.getAddedDate());
-            intent.putExtra("availableMonth", property.getAvailableMonth());
-            intent.putExtra("description", property.getDescription());
+            intent.putExtra("property", property);
             context.startActivity(intent);
         });
-
-
     }
 
     @Override
@@ -78,15 +57,45 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
         return propertyList.size();
     }
 
-    public static class PropertyViewHolder extends RecyclerView.ViewHolder {
-        TextView categoryFlatTypeTextView, locationTextView;
-        ImageView propertyImageView;
+   static class PropertyViewHolder extends RecyclerView.ViewHolder {
+        TextView categoryFlatTypeTextView, locationTextView, likeTextView;
+        ImageView propertyImageView, likeButton;
+
+        FirebaseFirestore firestore;
+        FirebaseUser currentUser;
+       private String id;
 
         public PropertyViewHolder(@NonNull View itemView) {
             super(itemView);
             categoryFlatTypeTextView = itemView.findViewById(R.id.categoryFlatTypeTextView);
             locationTextView = itemView.findViewById(R.id.locationTextView);
             propertyImageView = itemView.findViewById(R.id.propertyImageView);
+            likeButton = itemView.findViewById(R.id.like_btn);
+            likeTextView = itemView.findViewById(R.id.like_text);
         }
+
+        public void bind(PropertyList property) {
+            // Display property details
+            String categoryFlatType = property.getCategory() + " " + property.getFlatType();
+            categoryFlatTypeTextView.setText(categoryFlatType);
+            locationTextView.setText(property.getLocation());
+
+
+            // Load property image using Glide
+            Glide.with(itemView.getContext())
+                    .load(property.getImageUrl())
+                    .placeholder(R.drawable.placeholder_image)
+                    .error(R.drawable.error_image)
+                    .into(propertyImageView);
+
+
+//            // Set like button icon based on like status
+//            if (property.isLiked()) {
+//                likeButton.setImageResource(R.drawable.liked);
+//            } else {
+//                likeButton.setImageResource(R.drawable.like); // Change to your default like icon
+//            }
+        }
+
     }
 }

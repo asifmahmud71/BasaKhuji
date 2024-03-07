@@ -3,58 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logo Animation</title>
+    <title>Loading Animation</title>
     <style>
-        /* Define styles for your logo */
+        /* Define styles for the logo */
         #logo {
             width: 200px; /* Adjust width and height as per your logo size */
             position: absolute;
-            top: 50%;
+            top: calc(50% - 100px); /* Position logo above loading bar */
             left: 50%;
             transform: translate(-50%, -50%);
+        }
+
+        /* Define styles for the loading bar container */
+        #loading-bar-container {
+            width: 300px; /* Adjust width as needed */
+            height: 20px; /* Adjust height as needed */
+            background-color: #333;
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add shadow */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 50%);
+        }
+
+        /* Define styles for the loading bar */
+        #progress-bar {
+            width: 0;
+            height: 100%;
+            background: linear-gradient(to right, #4CAF50, #8BC34A); /* Gradient background */
+            border-radius: 10px; /* Rounded corners */
+        }
+
+        /* Define styles for the loading text */
+        #loading-text {
+            color: white;
+            text-align: center;
+            line-height: 20px;
         }
     </style>
 </head>
 <body>
-    <!-- Replace 'logo.png' with the path to your logo image -->
-    <img id="logo" src="logo.jpg" alt="Your App Logo">
+<!-- Logo -->
+<img id="logo" src="logo.jpg" alt="Your App Logo">
 
-    <!-- Include GSAP library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
-    <script>
-        // Define your animation using GSAP
-        
-		
-<!--		gsap.to("#logo", {-->
-<!--            duration: 1.5,-->
-<!--            opacity: 1, // Fade in-->
-<!--            //repeat: -1, // Repeat infinitely-->
-<!--            yoyo: true, // Reverse animation-->
-<!--            ease: "power1.inOut" // Use power1 easing function-->
-<!--        });-->
-<!--		gsap.to("#logo", {-->
-<!--            duration: 3,-->
-<!--            x: "+=200", // Move 200 pixels to the right-->
-<!--            //repeat: -1, // Repeat infinitely-->
-<!--            yoyo: true, // Reverse animation-->
-<!--            ease: "power1.inOut" // Use power1 easing function-->
-<!--        });-->
-		
-		gsap.to("#logo", {
-            duration: 2,
-            rotate: 360, // Rotate 360 degrees
-            repeat: 0, // Repeat infinitely
-            ease: "linear" // Use linear easing function
+<!-- Loading Bar Container -->
+<div id="loading-bar-container">
+    <!-- Loading Bar -->
+    <div id="progress-bar"></div>
+</div>
+
+<!-- Loading Text -->
+<div id="loading-text">Loading...</div>
+
+<!-- Include GSAP library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+<script>
+        // Define loading animation using GSAP
+        gsap.to("#progress-bar", {
+            duration: 3, // 3 seconds
+            width: "100%", // Set width to 100%
+            ease: "none", // Linear easing
+            onComplete: function() {
+                // Optional: Perform action after animation completes
+                console.log("Loading complete!");
+            }
         });
-<!--		gsap.to("#logo", {-->
-<!--            duration: 1,-->
-<!--            scale: 1.2, // Scale up to 1.2 times-->
-<!--            yoyo: true, // Reverse animation-->
-<!--            //repeat: -1, // Repeat infinitely-->
-<!--            ease: "power1.inOut" // Use power1 easing function-->
-<!--        });-->
-		
-		
     </script>
 </body>
 </html>

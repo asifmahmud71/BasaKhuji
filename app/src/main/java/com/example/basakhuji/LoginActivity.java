@@ -1,9 +1,10 @@
 package com.example.basakhuji;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,33 +23,51 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailEditText, passwordEditText;
     private FirebaseAuth mAuth;
 
-    private WebView webView;
+    // creating constant keys for shared preferences.
+    public static final String SHARED_PREFS = "shared_prefs";
+
+    // key for storing email.
+    public static final String EMAIL_KEY = "email_key";
+
+    // key for storing password.
+    public static final String PASSWORD_KEY = "password_key";
+
+    // variable for shared preferences.
+    SharedPreferences sharedpreferences;
+    String email, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // getting the data which is stored in shared preferences.
+        sharedpreferences = this.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+
+
+
+
+
         mAuth = FirebaseAuth.getInstance();
 
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
-
         Button loginButton = findViewById(R.id.loginButton);
-
 
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Add logic for login here
-                String email = emailEditText.getText().toString().trim();
-                String password = passwordEditText.getText().toString().trim();
+                email = emailEditText.getText().toString().trim();
+                password = passwordEditText.getText().toString().trim();
 
-                if (!email.isEmpty() && !password.isEmpty()) {
-                    loginUser(email, password);
-                } else {
+                // TODO: 24-Feb-24
+                //check email and pass null or not
+                if (email.isEmpty() && password.isEmpty()) {
                     Toast.makeText(LoginActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
+                }else {
+                    loginUser(email, password);
                 }
             }
         });
@@ -71,8 +90,19 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
+
                             Toast.makeText(LoginActivity.this, "Successfully logged in",
                                     Toast.LENGTH_SHORT).show();
+
+
+                            SharedPreferences.Editor  editor = sharedpreferences.edit();
+                            // below two lines will put values for
+                            // email and password in shared preferences.
+                            Toast.makeText(LoginActivity.this, email, Toast.LENGTH_LONG).show();
+                            editor.putString(EMAIL_KEY,email);
+                            // to save our data with key and value.
+                            editor.apply();
+
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
                         } else {
@@ -83,4 +113,14 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (email != null && password != null) {
+            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(i);
+        }
+    }
+
 }

@@ -1,173 +1,277 @@
-// PropertyDetailsActivity.java
 package com.example.basakhuji;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.basakhuji.Models.PropertyList;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class PropertyDetailsActivity extends AppCompatActivity {
 
-    private int likes = 0;
-    private int dislikes = 0;
-    private SharedPreferences sharedPreferences;
-    private String propertyId;
+    private PropertyList propertyList;
+
     private FirebaseFirestore firestore;
-    private RatingBar ratingBar;
+    private final FirebaseUser currentUser;
+    TextView likeTextView, dislikeTextView;
+    ImageView likeButton, dislikeButton;
+    private ListenerRegistration likeListener;
+    private ListenerRegistration dislikeListener;
+
+
+    public PropertyDetailsActivity() {
+        this.firestore = FirebaseFirestore.getInstance();
+        this.currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_property_details);
 
-        firestore = FirebaseFirestore.getInstance();
-
-        // Initialize SharedPreferences
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        // Retrieve saved counts of likes and dislikes for this property
+        // Retrieve Intent and check for necessary extras
         Intent intent = getIntent();
-        // Update like and dislike counts
-        updateLikeDislikeCount();
-
-        ratingBar = findViewById(R.id.ratingBar);
-        Button submitRatingButton = findViewById(R.id.submitRatingButton);
-
-        // Retrieve property details from intent extras
-        if (intent != null) {
-            propertyId = intent.getStringExtra("id"); // Get property ID
-            if (propertyId == null) {
-                Log.e("PropertyDetailsActivity", "Property ID is null");
-            } else {
-                Log.d("PropertyDetailsActivity", "Property ID: " + propertyId);
-            }
-
-            likes = getLikesFromStorage(propertyId);
-            dislikes = getDislikesFromStorage(propertyId);
-            String location = intent.getStringExtra("location");
-            String category = intent.getStringExtra("category");
-            String flatType = intent.getStringExtra("flatType");
-            String price = intent.getStringExtra("price");
-            String imageUrl = intent.getStringExtra("imageUrl");
-            String addedDate = intent.getStringExtra("addedDate");
-            String availableMonth = intent.getStringExtra("availableMonth");
-            String description = intent.getStringExtra("description");
-
-            // Display property details
-            TextView locationTextView = findViewById(R.id.locationTextView);
-            locationTextView.setText(location);
-
-            TextView categoryTextView = findViewById(R.id.categoryTextView);
-            categoryTextView.setText(category);
-
-            TextView flatTypeTextView = findViewById(R.id.flatTypeTextView);
-            flatTypeTextView.setText(flatType);
-
-            TextView priceTextView = findViewById(R.id.priceTextView);
-            priceTextView.setText(price);
-
-            TextView addedDateTextView = findViewById(R.id.addedDateTextView);
-            addedDateTextView.setText(addedDate);
-
-            TextView availableMonthTextView = findViewById(R.id.availableMonthTextView);
-            availableMonthTextView.setText(availableMonth);
-
-            TextView descriptionTextView = findViewById(R.id.descriptionTextView);
-            descriptionTextView.setText(description);
-
-            ImageView propertyImageView = findViewById(R.id.propertyImageView);
-            Glide.with(this).load(imageUrl).into(propertyImageView);
-
-            // Initialize like and dislike buttons
-            Button likeButton = findViewById(R.id.likeButton);
-            Button dislikeButton = findViewById(R.id.dislikeButton);
-
-            // Set onClickListeners for like and dislike buttons
-            likeButton.setOnClickListener(v -> {
-                incrementLikes(propertyId);
-            });
-
-            dislikeButton.setOnClickListener(v -> {
-                incrementDislikes(propertyId);
-            });
+        if (intent != null && intent.hasExtra("property")) {
+            propertyList = (PropertyList) intent.getSerializableExtra("property");
+            Log.d("PropertyDetailsActivity", "Property: " + propertyList.toString());
+        } else {
+            Log.e("PropertyDetailsActivity", "Intent or property is null");
+            finish(); // Close activity if property is null
+            return;
         }
-        submitRatingButton.setOnClickListener(v -> {
-            float rating = ratingBar.getRating();
-            submitRating(rating);
+
+        // Bind views
+        TextView locationTextView = findViewById(R.id.locationTextView);
+        TextView categoryTextView = findViewById(R.id.categoryTextView);
+        TextView flatTypeTextView = findViewById(R.id.flatTypeTextView);
+        TextView priceTextView = findViewById(R.id.priceTextView);
+        TextView addedDateTextView = findViewById(R.id.addedDateTextView);
+        TextView availableMonthTextView = findViewById(R.id.availableMonthTextView);
+        TextView descriptionTextView = findViewById(R.id.descriptionTextView);
+        ImageView propertyImageView = findViewById(R.id.propertyImageView);
+        TextView beds = findViewById(R.id.bedsTextView);
+        TextView baths = findViewById(R.id.bathsTextView);
+        likeButton = findViewById(R.id.like_btn);
+        likeTextView = findViewById(R.id.like_text);
+        dislikeButton = findViewById(R.id.dislike_btn);
+        dislikeTextView = findViewById(R.id.dislike_text);
+
+        // Populate views with property details
+        locationTextView.setText("Location   :       "+propertyList.getLocation());
+        categoryTextView.setText("Category   :      "+propertyList.getCategory());
+        flatTypeTextView.setText("Type of Property   :       "+propertyList.getFlatType());
+        beds.setText("Beds   :       "+propertyList.getBeds());
+        baths.setText("Baths   :       "+propertyList.getBaths());
+        priceTextView.setText("Price   :       "+propertyList.getPrice());
+        addedDateTextView.setText("Added at   :       "+propertyList.getAddedDate());
+        availableMonthTextView.setText("Availabe From   :       "+propertyList.getAvailableMonth());
+        descriptionTextView.setText("Description   :       "+propertyList.getDescription());
+
+        // Load property image using Glide
+        Glide.with(this)
+                .load(propertyList.getImageUrl())
+                .into(propertyImageView);
+
+        // Handle like button click
+        likeButton.setOnClickListener(v -> {
+            likeProperty(propertyList);
         });
 
+        // Handle dislike button click
+        dislikeButton.setOnClickListener(v -> {
+            dislikeProperty(propertyList);
+        });
+
+        addLikeListener();
+        addDislikeListener();
     }
-    // Method to submit rating to Firestore
-    private void submitRating(float rating) {
-        if (propertyId != null) {
-            firestore.collection("properties").document(propertyId)
-                    .update("rating", rating)
-                    .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(PropertyDetailsActivity.this, "Rating submitted successfully", Toast.LENGTH_SHORT).show();
-                    })
-                    .addOnFailureListener(e -> Toast.makeText(PropertyDetailsActivity.this, "Failed to submit rating", Toast.LENGTH_SHORT).show());
-        } else {
-            Toast.makeText(PropertyDetailsActivity.this, "Property ID is null", Toast.LENGTH_SHORT).show();
+
+    private void likeProperty(PropertyList property) {
+        firestore.collection("properties").document(property.getId())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            List<String> likedBy = (List<String>) document.get("likedBy");
+                            List<String> dislikedBy = (List<String>) document.get("dislikedBy");
+                            int currentLikeCount = likedBy != null ? likedBy.size() : 0;
+                            if (likedBy != null && likedBy.contains(currentUser.getUid())) {
+                                // User already liked the property, remove like
+                                Map<String, Object> updates = new HashMap<>();
+                                updates.put("likedBy", FieldValue.arrayRemove(currentUser.getUid()));
+                                updates.put("likeCount", currentLikeCount - 1);
+                                firestore.collection("properties").document(property.getId())
+                                        .update(updates)
+                                        .addOnCompleteListener(task1 -> {
+                                            if (task1.isSuccessful()) {
+                                                // Update UI
+                                                likeButton.setImageResource(R.drawable.like);
+                                                likeTextView.setText(String.valueOf(currentLikeCount - 1));
+                                                Toast.makeText(PropertyDetailsActivity.this, "Like removed", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(PropertyDetailsActivity.this, "Failed to remove like", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            } else {
+                                // Like the property
+                                Map<String, Object> updates = new HashMap<>();
+                                updates.put("likedBy", FieldValue.arrayUnion(currentUser.getUid()));
+                                updates.put("likeCount", currentLikeCount + 1);
+                                // Remove dislike if user has disliked the property
+                                if (dislikedBy != null && dislikedBy.contains(currentUser.getUid())) {
+                                    updates.put("dislikedBy", FieldValue.arrayRemove(currentUser.getUid()));
+                                }
+                                firestore.collection("properties").document(property.getId())
+                                        .update(updates)
+                                        .addOnCompleteListener(task1 -> {
+                                            if (task1.isSuccessful()) {
+                                                // Update UI
+                                                likeButton.setImageResource(R.drawable.liked);
+                                                likeTextView.setText(String.valueOf(currentLikeCount + 1));
+                                                Toast.makeText(PropertyDetailsActivity.this, "Property liked", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(PropertyDetailsActivity.this, "Failed to like property", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
+    }
+
+    private void dislikeProperty(PropertyList property) {
+        firestore.collection("properties").document(property.getId())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            List<String> likedBy = (List<String>) document.get("likedBy");
+                            List<String> dislikedBy = (List<String>) document.get("dislikedBy");
+                            int currentDislikeCount = dislikedBy != null ? dislikedBy.size() : 0;
+                            if (dislikedBy != null && dislikedBy.contains(currentUser.getUid())) {
+                                // User already disliked the property, remove dislike
+                                Map<String, Object> updates = new HashMap<>();
+                                updates.put("dislikedBy", FieldValue.arrayRemove(currentUser.getUid()));
+                                updates.put("dislikeCount", currentDislikeCount - 1);
+                                firestore.collection("properties").document(property.getId())
+                                        .update(updates)
+                                        .addOnCompleteListener(task1 -> {
+                                            if (task1.isSuccessful()) {
+                                                // Update UI
+                                                dislikeButton.setImageResource(R.drawable.dislike);
+                                                dislikeTextView.setText(String.valueOf(currentDislikeCount - 1));
+                                                Toast.makeText(PropertyDetailsActivity.this, "Dislike removed", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(PropertyDetailsActivity.this, "Failed to remove dislike", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            } else {
+                                // Dislike the property
+                                Map<String, Object> updates = new HashMap<>();
+                                updates.put("dislikedBy", FieldValue.arrayUnion(currentUser.getUid()));
+                                updates.put("dislikeCount", currentDislikeCount + 1);
+                                // Remove like if user has liked the property
+                                if (likedBy != null && likedBy.contains(currentUser.getUid())) {
+                                    updates.put("likedBy", FieldValue.arrayRemove(currentUser.getUid()));
+                                }
+                                firestore.collection("properties").document(property.getId())
+                                        .update(updates)
+                                        .addOnCompleteListener(task1 -> {
+                                            if (task1.isSuccessful()) {
+                                                // Update UI
+                                                dislikeButton.setImageResource(R.drawable.disliked1);
+                                                dislikeTextView.setText(String.valueOf(currentDislikeCount + 1));
+                                                Toast.makeText(PropertyDetailsActivity.this, "Property disliked", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(PropertyDetailsActivity.this, "Failed to dislike property", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
+    }
+
+    // Method to add Firestore listener for changes in likedBy array
+    private void addLikeListener() {
+        likeListener = firestore.collection("properties").document(propertyList.getId())
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        Log.e("PropertyDetailsActivity", "Listen failed", error);
+                        return;
+                    }
+
+                    if (value != null && value.exists()) {
+                        List<String> likedBy = (List<String>) value.get("likedBy");
+                        if (likedBy != null) {
+                            int likeCount = likedBy.size();
+                            likeTextView.setText(String.valueOf(likeCount));
+                            if (likedBy.contains(currentUser.getUid())) {
+                                likeButton.setImageResource(R.drawable.liked);
+                            } else {
+                                likeButton.setImageResource(R.drawable.like);
+                            }
+                        } else {
+                            likeTextView.setText("0");
+                            likeButton.setImageResource(R.drawable.like);
+                        }
+                    }
+                });
+    }
+
+    // Method to add Firestore listener for changes in dislikedBy array
+    private void addDislikeListener() {
+        dislikeListener = firestore.collection("properties").document(propertyList.getId())
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        Log.e("PropertyDetailsActivity", "Listen failed", error);
+                        return;
+                    }
+
+                    if (value != null && value.exists()) {
+                        List<String> dislikedBy = (List<String>) value.get("dislikedBy");
+                        if (dislikedBy != null) {
+                            int dislikeCount = dislikedBy.size();
+                            dislikeTextView.setText(String.valueOf(dislikeCount));
+                            if (dislikedBy.contains(currentUser.getUid())) {
+                                dislikeButton.setImageResource(R.drawable.disliked1);
+                            } else {
+                                dislikeButton.setImageResource(R.drawable.dislike);
+                            }
+                        } else {
+                            dislikeTextView.setText("0");
+                            dislikeButton.setImageResource(R.drawable.dislike);
+                        }
+                    }
+                });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Remove Firestore listeners to avoid memory leaks
+        if (likeListener != null) {
+            likeListener.remove();
         }
-    }
-
-    // Method to update like and dislike counts on UI
-    private void updateLikeDislikeCount() {
-        TextView likeCountTextView = findViewById(R.id.likeCountTextView);
-        TextView dislikeCountTextView = findViewById(R.id.dislikeCountTextView);
-
-        likeCountTextView.setText(String.valueOf(likes));
-        dislikeCountTextView.setText(String.valueOf(dislikes));
-    }
-
-    // Method to retrieve likes count from SharedPreferences
-    private int getLikesFromStorage(String propertyId) {
-        return sharedPreferences.getInt(propertyId + "_likes", 0);
-    }
-
-    // Method to save likes count to SharedPreferences
-    private void saveLikesToStorage(String propertyId, int likes) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(propertyId + "_likes", likes);
-        editor.apply();
-    }
-
-    // Method to retrieve dislikes count from SharedPreferences
-    private int getDislikesFromStorage(String propertyId) {
-        return sharedPreferences.getInt(propertyId + "_dislikes", 0);
-    }
-
-    // Method to save dislikes count to SharedPreferences
-    private void saveDislikesToStorage(String propertyId, int dislikes) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(propertyId + "_dislikes", dislikes);
-        editor.apply();
-    }
-
-    // Method to increment likes count and update UI
-    private void incrementLikes(String propertyId) {
-        likes++;
-        saveLikesToStorage(propertyId, likes);
-        updateLikeDislikeCount();
-        Toast.makeText(this, "Liked!", Toast.LENGTH_SHORT).show();
-    }
-
-    // Method to increment dislikes count and update UI
-    private void incrementDislikes(String propertyId) {
-        dislikes++;
-        saveDislikesToStorage(propertyId, dislikes);
-        updateLikeDislikeCount();
-        Toast.makeText(this, "Disliked!", Toast.LENGTH_SHORT).show();
+        if (dislikeListener != null) {
+            dislikeListener.remove();
+        }
     }
 }

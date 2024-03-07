@@ -118,8 +118,8 @@ public class AddPropertyActivity extends AppCompatActivity {
 
     private void savePropertyDetails(String imageUrl) {
         String location = locationEditText.getText().toString().trim();
-        int beds = Integer.parseInt(bedsEditText.getText().toString().trim());
-        int baths = Integer.parseInt(bathsEditText.getText().toString().trim());
+        String beds = bedsEditText.getText().toString().trim();
+        String baths = bathsEditText.getText().toString().trim();
         String category = categorySpinner.getSelectedItem().toString();
         String flatType = flatTypeSpinner.getSelectedItem().toString();
         String availableMonth = availableMonthSpinner.getSelectedItem().toString();
@@ -138,7 +138,15 @@ public class AddPropertyActivity extends AppCompatActivity {
         property.put("availableMonth", availableMonth);
         property.put("price", price + " BDT");
         property.put("description", description);
-        property.put("imageUrl", imageUrl); // Store the image URL
+
+        // Store the image URL
+        property.put("imageUrl", imageUrl);
+
+        // Initialize likedBy field as empty list
+        property.put("likedBy", new ArrayList<>());
+
+        // Initialize dislikedBy field as empty list
+        property.put("dislikedBy", new ArrayList<>());
 
         db.collection("properties")
                 .add(property)

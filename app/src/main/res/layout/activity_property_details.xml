@@ -61,8 +61,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/priceTextView"
+        android:id="@+id/bedsTextView"
         android:layout_below="@+id/flatTypeTextView"
+        android:textSize="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bathsTextView"
+        android:layout_below="@+id/bedsTextView"
+        android:textSize="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/priceTextView"
+        android:layout_below="@+id/bathsTextView"
         android:textSize="16dp"/>
 
     <TextView
@@ -87,82 +101,155 @@
         android:textSize="16dp"
         />
 
-<LinearLayout
-    android:id="@+id/linearLikeDislike"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_below="@+id/descriptionTextView"
+<!--<LinearLayout-->
+<!--    android:id="@+id/linearLikeDislike"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:orientation="horizontal"-->
+<!--    android:layout_below="@+id/descriptionTextView"-->
 
-    >
+<!--    >-->
+<!--    <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        >-->
+<!--        <TextView-->
+<!--            android:id="@+id/likeCountTextView"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:text="Likes: 0" />-->
+
+<!--        <Button-->
+<!--            android:id="@+id/likeButton"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:text="Like" />-->
+
+
+<!--    </LinearLayout>-->
+
+<!--<LinearLayout-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:orientation="vertical"-->
+
+<!--    >-->
+<!--    <TextView-->
+<!--        android:id="@+id/dislikeCountTextView"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginLeft="70dp"-->
+<!--        android:text="Dislikes: 0" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/dislikeButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="60dp"-->
+<!--        android:layout_marginVertical="18dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:text="Dislike" />-->
+
+<!--</LinearLayout>-->
+
+<!--</LinearLayout>-->
+
+<!--    <RatingBar-->
+<!--        android:id="@+id/ratingBar"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/descriptionTextView"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:numStars="5"-->
+<!--        android:stepSize="1"-->
+<!--        android:rating="0"-->
+<!--        android:isIndicator="false"/>-->
+
+<!--    <Button-->
+<!--        android:id="@+id/submitRatingButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/ratingBar"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:text="Submit Rating"/>-->
+
+
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
-        <TextView
-            android:id="@+id/likeCountTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="10dp"
-            android:text="Likes: 0" />
+        android:orientation="horizontal"
+        android:layout_below="@+id/descriptionTextView"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:gravity="center_vertical">
 
-        <Button
-            android:id="@+id/likeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Like" />
+        <!-- Like LinearLayout -->
+        <LinearLayout
+            android:id="@+id/likeLayout"
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:background="@drawable/rounded_background">
 
+            <!-- Like button -->
+            <ImageView
+                android:id="@+id/like_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/like"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="5dp" />
 
+            <!-- Like count -->
+            <TextView
+                android:id="@+id/like_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Likes"
+                android:textColor="@color/white"
+                android:gravity="center_horizontal"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
+
+        <!-- Dislike LinearLayout -->
+        <LinearLayout
+            android:id="@+id/dislikeLayout"
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:layout_marginStart="80dp"
+            android:background="@drawable/rounded_background">
+
+            <!-- Dislike button -->
+            <ImageView
+                android:id="@+id/dislike_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/dislike"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="5dp" />
+
+            <!-- Dislike count -->
+            <TextView
+                android:id="@+id/dislike_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Dislikes"
+                android:textColor="@color/white"
+                android:gravity="center_horizontal"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
     </LinearLayout>
-
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-
-    >
-    <TextView
-        android:id="@+id/dislikeCountTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="70dp"
-        android:text="Dislikes: 0" />
-
-    <Button
-        android:id="@+id/dislikeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="60dp"
-        android:layout_marginVertical="18dp"
-        android:layout_marginTop="8dp"
-        android:text="Dislike" />
-
-</LinearLayout>
-
-</LinearLayout>
-
-    <RatingBar
-        android:id="@+id/ratingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/linearLikeDislike"
-        android:layout_marginTop="16dp"
-        android:numStars="5"
-        android:stepSize="1"
-        android:rating="0"
-        android:isIndicator="false"/>
-
-    <Button
-        android:id="@+id/submitRatingButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ratingBar"
-        android:layout_marginTop="16dp"
-        android:text="Submit Rating"/>
 
 
 </RelativeLayout>

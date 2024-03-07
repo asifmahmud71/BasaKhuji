@@ -2,7 +2,9 @@ package com.example.basakhuji;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,8 +25,11 @@ import com.google.firebase.firestore.ListenerRegistration;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity{
 
+
+    private static final float DEFAULT_ZOOM = 20;
+    private GoogleMap myMap;
     private String stringJavaScript = "<!DOCTYPE html>\n" +
             "<html>\n" +
             "  <body>\n" +
@@ -46,7 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
             "      function onYouTubeIframeAPIReady() {\n" +
             "        player = new YT.Player('player', {\n" +
             "          height: '195',\n" +
-            "          width: '320',\n" +
+            "          width: '350',\n" +
             "          videoId: 'Vey-jmGJVNU',\n" +
             "          playerVars: {\n" +
             "            'playsinline': 1\n" +
@@ -88,11 +94,24 @@ public class ProfileActivity extends AppCompatActivity {
 
     private TextView usernameTextView;
     private EditText fullNameEditText, emailEditText, phoneNumberEditText, usernameEditText;
-    private Button updateButton, logoutButton;
+    private Button updateButton, logoutButton, map_btn;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private ListenerRegistration userListener;
+    // creating constant keys for shared preferences.
+    public static final String SHARED_PREFS = "shared_prefs";
+
+    // key for storing email.
+    public static final String EMAIL_KEY = "email_key";
+
+    // key for storing password.
+    public static final String PASSWORD_KEY = "password_key";
+
+    // variable for shared preferences.
+    SharedPreferences sharedpreferences;
+    String email;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,9 +121,29 @@ public class ProfileActivity extends AppCompatActivity {
         webView = findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
 
+        map_btn = findViewById(R.id.map_btn);
+        map_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ProfileActivity.this, MapsActivity.class));
+            }
+        });
+
+//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+//        mapFragment.getMapAsync(ProfileActivity.this);
+
+
         // Initialize Firebase components
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+
+        // initializing our shared preferences.
+        sharedpreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+
+        // getting data from shared prefs and
+        // storing it in our string variable.
+        email = sharedpreferences.getString("EMAIL_KEY", null);
+
 
         // Find views
         usernameTextView = findViewById(R.id.usernameTextView);
@@ -131,18 +170,36 @@ public class ProfileActivity extends AppCompatActivity {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // calling method to edit values in shared prefs.
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+
+                // below line will clear
+                // the data in shared prefs.
+                editor.clear();
+
+                // below line will apply empty
+                // data to shared prefs.
+                editor.apply();
+
                 logoutUser();
             }
         });
     }
 
-    public void buttonPlayYouTubeVideo(View view){
+    public void buttonPlayYouTubeVideo(View view) {
         webView.loadData(stringJavaScript, "text/html", "utf-8");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
+//        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//
+//        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//            Toast.makeText(this, "Please enable location services", Toast.LENGTH_SHORT).show();
+//            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+//        }
 
         // Check if user is signed in (non-null) and update UI accordingly
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -186,7 +243,7 @@ public class ProfileActivity extends AppCompatActivity {
                         fullNameEditText.setText(fullName);
                         emailEditText.setText(email);
                         phoneNumberEditText.setText(phoneNumber);
-                        Log.d(TAG, "phone number is: "+phoneNumber);
+                        Log.d(TAG, "phone number is: " + phoneNumber);
                         usernameEditText.setText(username);
                     }
                 });
@@ -220,10 +277,11 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void logoutUser() {
-        // Sign out user from Firebase Authentication
+
         mAuth.signOut();
         // Navigate back to login screen
         startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
         finish();
     }
+
 }
