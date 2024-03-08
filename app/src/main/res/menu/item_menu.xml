@@ -13,6 +13,10 @@
         android:icon="@drawable/add"
         android:title="Add"/>
 
+    <item android:id="@+id/rating"
+        android:icon="@drawable/rating"
+        android:title="Rating"/>
+
     <item android:id="@+id/profile"
         android:icon="@drawable/profile"
         android:title="Profile"/>

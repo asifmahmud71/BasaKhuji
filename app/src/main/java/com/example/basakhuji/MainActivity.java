@@ -47,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.add) {
                 startActivity(new Intent(MainActivity.this, AddPropertyActivity.class));
                 return true;
+            } else if (item.getItemId() == R.id.rating) {
+                startActivity(new Intent(MainActivity.this, RatingActivity.class));
+                return true;
             } else if (item.getItemId() == R.id.profile) {
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                 return true;
@@ -57,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     // Method to populate propertyList with sample data (replace this with Firestore data retrieval)
-
     private void AllPropertyList() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("properties")

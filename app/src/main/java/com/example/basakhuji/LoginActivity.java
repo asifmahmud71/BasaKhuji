@@ -98,7 +98,8 @@ public class LoginActivity extends AppCompatActivity {
                             SharedPreferences.Editor  editor = sharedpreferences.edit();
                             // below two lines will put values for
                             // email and password in shared preferences.
-                            Toast.makeText(LoginActivity.this, email, Toast.LENGTH_LONG).show();
+                            //Toast.makeText(LoginActivity.this, email, Toast.LENGTH_LONG).show();
+
                             editor.putString(EMAIL_KEY,email);
                             // to save our data with key and value.
                             editor.apply();

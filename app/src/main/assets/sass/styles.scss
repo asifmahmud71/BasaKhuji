@@ -1,0 +1,36 @@
+// Define styles for the logo
+#logo {
+    width: 200px; /* Adjust width and height as per your logo size */
+    position: absolute;
+    top: calc(50% - 100px); /* Position logo above loading bar */
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+// Define styles for the loading bar container
+#loading-bar-container {
+    width: 300px; /* Adjust width as needed */
+    height: 20px; /* Adjust height as needed */
+    background-color: #333;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add shadow */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+}
+
+// Define styles for the loading bar
+#progress-bar {
+    width: 0;
+    height: 100%;
+    background: linear-gradient(to right, #4CAF50, #8BC34A); /* Gradient background */
+    border-radius: 10px; /* Rounded corners */
+}
+
+// Define styles for the loading text
+#loading-text {
+    color: white;
+    text-align: center;
+    line-height: 20px;
+}
