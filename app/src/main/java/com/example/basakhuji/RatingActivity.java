@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -33,6 +35,8 @@ public class RatingActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
     private FirebaseUser currentUser;
     private LinearLayout ratingsLayout;
+    private int currentPage = 0;
+    private int totalPages = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +48,37 @@ public class RatingActivity extends AppCompatActivity {
 
         AppCompatButton ratingButton = findViewById(R.id.ratingButton);
         ratingsLayout = findViewById(R.id.commentsLayout);
+        Button nextButton = findViewById(R.id.nextButton);
+        Button prevButton = findViewById(R.id.prevButton);
 
         ratingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showRatingDialog();
+            }
+        });
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentPage < totalPages - 1) {
+                    currentPage++;
+                    loadRatingsAndComments();
+                } else {
+                    Toast.makeText(RatingActivity.this, "Already on the last page", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        prevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentPage > 0) {
+                    currentPage--;
+                    loadRatingsAndComments();
+                } else {
+                    Toast.makeText(RatingActivity.this, "Already on the first page", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -89,39 +119,39 @@ public class RatingActivity extends AppCompatActivity {
     }
 
     private void saveRatingAndComment(float rating, String comment) {
-            String userEmail = currentUser.getEmail();
-            // Check if the user has already rated and commented
-            firestore.collection("ratings")
-                    .whereEqualTo("userEmail", userEmail)
-                    .get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        if (queryDocumentSnapshots.isEmpty()) {
-                            // User hasn't rated and commented yet, proceed to save
-                            CollectionReference ratingsRef = firestore.collection("ratings");
+        String userEmail = currentUser.getEmail();
+        // Check if the user has already rated and commented
+        firestore.collection("ratings")
+                .whereEqualTo("userEmail", userEmail)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (queryDocumentSnapshots.isEmpty()) {
+                        // User hasn't rated and commented yet, proceed to save
+                        CollectionReference ratingsRef = firestore.collection("ratings");
 
-                            Map<String, Object> data = new HashMap<>();
-                            data.put("userEmail", userEmail);
-                            data.put("rating", rating);
-                            data.put("comment", comment);
+                        Map<String, Object> data = new HashMap<>();
+                        data.put("userEmail", userEmail);
+                        data.put("rating", rating);
+                        data.put("comment", comment);
 
-                            ratingsRef.add(data)
-                                    .addOnSuccessListener(documentReference -> {
-                                        Toast.makeText(this, "Rating and comment saved successfully", Toast.LENGTH_SHORT).show();
-                                        // Refresh ratings and comments after adding a new one
-                                        loadRatingsAndComments();
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Toast.makeText(this, "Failed to save rating and comment: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    });
-                        } else {
-                            // User has already rated and commented
-                            Toast.makeText(this, "You have already rated and commented", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnFailureListener(e -> {
-                        // Error occurred while checking for existing ratings and comments
-                        Toast.makeText(this, "Failed to check existing ratings and comments: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    });
+                        ratingsRef.add(data)
+                                .addOnSuccessListener(documentReference -> {
+                                    Toast.makeText(this, "Rating and comment saved successfully", Toast.LENGTH_SHORT).show();
+                                    // Refresh ratings and comments after adding a new one
+                                    loadRatingsAndComments();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(this, "Failed to save rating and comment: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                    } else {
+                        // User has already rated and commented
+                        Toast.makeText(this, "You have already rated and commented", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Error occurred while checking for existing ratings and comments
+                    Toast.makeText(this, "Failed to check existing ratings and comments: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
 
     }
 
@@ -136,9 +166,19 @@ public class RatingActivity extends AppCompatActivity {
                             return;
                         }
 
+                        // Calculate the total number of pages based on the number of ratings and comments
+                        List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
+                        int totalItems = documents.size();
+                        totalPages = (totalItems + 4) / 5; // Round up to the nearest whole number
+
+                        // Clear the layout before loading new ratings and comments
                         ratingsLayout.removeAllViews();
 
-                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()) {
+                        // Display ratings and comments for the current page
+                        int startIndex = currentPage * 5;
+                        int endIndex = Math.min(startIndex + 5, totalItems);
+                        for (int i = startIndex; i < endIndex; i++) {
+                            DocumentSnapshot documentSnapshot = documents.get(i);
                             String userEmail = documentSnapshot.getString("userEmail");
                             float rating = Float.parseFloat(String.valueOf(documentSnapshot.getDouble("rating")));
                             String comment = documentSnapshot.getString("comment");
@@ -155,8 +195,43 @@ public class RatingActivity extends AppCompatActivity {
 
                             ratingsLayout.addView(ratingView);
                         }
+
+                        // Update page numbers
+                        updatePageNumbers();
                     }
                 });
     }
+
+    private void updatePageNumbers() {
+        LinearLayout pageLayout = findViewById(R.id.pageLayout);
+        pageLayout.removeAllViews();
+
+        for (int i = 0; i < totalPages; i++) {
+            Button button = new Button(this);
+            button.setText(String.valueOf(i + 1));
+            button.setTag(i);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    currentPage = (int) v.getTag();
+                    loadRatingsAndComments();
+                }
+            });
+
+            if (i == currentPage) {
+                button.setEnabled(false); // Disable the current page button
+            }
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            layoutParams.setMargins(8, 0, 8, 0);
+            button.setLayoutParams(layoutParams);
+
+            pageLayout.addView(button);
+        }
+    }
+
 
 }
