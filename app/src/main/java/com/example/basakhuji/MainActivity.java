@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     DocumentSnapshot document;
     String propertyId;
+    BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Initialize bottom navigation view
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.home) {
                 return true;
@@ -56,17 +57,31 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        bottomNavigationView.setSelectedItemId(R.id.home);
     }
 
 
-    // Method to populate propertyList with sample data (replace this with Firestore data retrieval)
+    // Method to populate propertyList with sample data
     private void AllPropertyList() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("properties")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        Toast.makeText(MainActivity.this, "Failed to fetch data: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (value != null && !value.isEmpty()) {
+                        propertyList.clear(); // Clear the existing list to avoid duplication
+
+                        for (QueryDocumentSnapshot document : value) {
                             String propertyId = document.getId();
                             PropertyList property = document.toObject(PropertyList.class);
                             property.setId(propertyId);
@@ -76,10 +91,8 @@ public class MainActivity extends AppCompatActivity {
                         adapter = new PropertyAdapter(this, propertyList);
                         recyclerView.setAdapter(adapter);
                         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-
                     } else {
-                        // Handle errors
-                        Toast.makeText(MainActivity.this, "Failed to fetch data", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "No data available", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

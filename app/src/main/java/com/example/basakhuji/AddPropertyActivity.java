@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -22,6 +23,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -50,6 +54,7 @@ public class AddPropertyActivity extends AppCompatActivity {
     private ImageView imagePreview;
     StorageReference storageReference;
     Uri imageUri;
+    String phoneNumber;
 
 
     @SuppressLint("MissingInflatedId")
@@ -73,6 +78,10 @@ public class AddPropertyActivity extends AppCompatActivity {
         flatTypeSpinner = findViewById(R.id.flatTypeSpinner);
         imagePreview = findViewById(R.id.imagePreview);
 
+        findViewById(R.id.flatTypeLabel).setVisibility(View.GONE);
+        flatTypeSpinner.setVisibility(View.GONE);
+
+
         ArrayAdapter<CharSequence> monthAdapter = ArrayAdapter.createFromResource(this,
                 R.array.months_array, android.R.layout.simple_spinner_item);
         monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -87,6 +96,25 @@ public class AddPropertyActivity extends AppCompatActivity {
                 R.array.flat_type_options, android.R.layout.simple_spinner_item);
         flatTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         flatTypeSpinner.setAdapter(flatTypeAdapter);
+
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Check which item is selected
+                String selectedCategory = parent.getItemAtPosition(position).toString();
+                if (selectedCategory.equals("Select Category")) {
+                    findViewById(R.id.flatTypeLabel).setVisibility(View.GONE);
+                    flatTypeSpinner.setVisibility(View.GONE);
+                } else {
+                    findViewById(R.id.flatTypeLabel).setVisibility(View.VISIBLE);
+                    flatTypeSpinner.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         Button submitButton = findViewById(R.id.submitButton);
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -114,48 +142,55 @@ public class AddPropertyActivity extends AppCompatActivity {
                 showDatePickerDialog();
             }
         });
+
     }
+
 
     private void savePropertyDetails(String imageUrl) {
-        String location = locationEditText.getText().toString().trim();
-        String beds = bedsEditText.getText().toString().trim();
-        String baths = bathsEditText.getText().toString().trim();
-        String category = categorySpinner.getSelectedItem().toString();
-        String flatType = flatTypeSpinner.getSelectedItem().toString();
-        String availableMonth = availableMonthSpinner.getSelectedItem().toString();
-        String description = descriptionEditText.getText().toString().trim();
-        String addedDate = addedDateTextView.getText().toString().trim();
-        String price = priceEditText.getText().toString().trim();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference userRef = db.collection("users").document(userId);
 
-        Map<String, Object> property = new HashMap<>();
-        property.put("location", location);
-        property.put("beds", beds);
-        property.put("baths", baths);
-        property.put("category", category);
-        property.put("addedDate", addedDate);
-        property.put("flatType", flatType);
-        property.put("availableMonth", availableMonth);
-        property.put("price", price + " BDT");
-        property.put("description", description);
+            userRef.get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    String phoneNumber = documentSnapshot.getString("phoneNumber");
 
-        // Store the image URL
-        property.put("imageUrl", imageUrl);
+                    // Create property object with userPhone included
+                    Map<String, Object> property = new HashMap<>();
+                    property.put("location", locationEditText.getText().toString().trim());
+                    property.put("beds", bedsEditText.getText().toString().trim());
+                    property.put("baths", bathsEditText.getText().toString().trim());
+                    property.put("category", categorySpinner.getSelectedItem().toString());
+                    property.put("addedDate", addedDateTextView.getText().toString().trim());
+                    property.put("flatType", flatTypeSpinner.getSelectedItem().toString());
+                    property.put("availableMonth", availableMonthSpinner.getSelectedItem().toString());
+                    property.put("price", priceEditText.getText().toString().trim() + " BDT");
+                    property.put("description", descriptionEditText.getText().toString().trim());
+                    property.put("imageUrl", imageUrl);
+                    property.put("userPhone", phoneNumber);
+                    property.put("likedBy", new ArrayList<>());
+                    property.put("dislikedBy", new ArrayList<>());
 
-        // Initialize likedBy field as empty list
-        property.put("likedBy", new ArrayList<>());
-
-        // Initialize dislikedBy field as empty list
-        property.put("dislikedBy", new ArrayList<>());
-
-        db.collection("properties")
-                .add(property)
-                .addOnSuccessListener(documentReference -> {
-                    Toast.makeText(AddPropertyActivity.this, "Property details added successfully", Toast.LENGTH_SHORT).show();
-                    finish();
-                })
-                .addOnFailureListener(e -> Toast.makeText(AddPropertyActivity.this, "Error adding property details: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                    // Save the property details
+                    db.collection("properties")
+                            .add(property)
+                            .addOnSuccessListener(documentReference -> {
+                                Toast.makeText(AddPropertyActivity.this, "Property details added successfully", Toast.LENGTH_SHORT).show();
+                                finish();
+                            })
+                            .addOnFailureListener(e -> Toast.makeText(AddPropertyActivity.this, "Error adding property details: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                } else {
+                    Toast.makeText(AddPropertyActivity.this, "User document does not exist", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(e -> Toast.makeText(AddPropertyActivity.this, "Failed to fetch user document: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+        } else {
+            Toast.makeText(AddPropertyActivity.this, "No authenticated user found", Toast.LENGTH_SHORT).show();
+        }
     }
+
 
     // Method to open image picker
     private void openImagePicker() {
@@ -187,7 +222,7 @@ public class AddPropertyActivity extends AppCompatActivity {
     }
 
     private void updateButton() {
-        String myFormat = "dd/MM/yyyy"; // Change this format as needed
+        String myFormat = "dd/MM/yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         addedDateTextView.setText(sdf.format(calendar.getTime()));
     }
@@ -214,7 +249,6 @@ public class AddPropertyActivity extends AppCompatActivity {
                 reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        // Image uploaded successfully, now save property details with image URL
                         savePropertyDetails(uri.toString());
                         Toast.makeText(AddPropertyActivity.this, "Image uploaded", Toast.LENGTH_SHORT).show();
                     }

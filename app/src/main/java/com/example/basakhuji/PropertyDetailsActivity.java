@@ -1,8 +1,10 @@
 package com.example.basakhuji;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,9 +50,9 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("property")) {
             propertyList = (PropertyList) intent.getSerializableExtra("property");
-            Log.d("PropertyDetailsActivity", "Property: " + propertyList.toString());
+            //Log.d("PropertyDetailsActivity", "Property: " + propertyList.toString());
         } else {
-            Log.e("PropertyDetailsActivity", "Intent or property is null");
+            //Log.e("PropertyDetailsActivity", "Intent or property is null");
             finish(); // Close activity if property is null
             return;
         }
@@ -66,10 +68,12 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         ImageView propertyImageView = findViewById(R.id.propertyImageView);
         TextView beds = findViewById(R.id.bedsTextView);
         TextView baths = findViewById(R.id.bathsTextView);
+        TextView conTextView = findViewById(R.id.conTextView);
         likeButton = findViewById(R.id.like_btn);
         likeTextView = findViewById(R.id.like_text);
         dislikeButton = findViewById(R.id.dislike_btn);
         dislikeTextView = findViewById(R.id.dislike_text);
+        TextView conlabel = findViewById(R.id.conLabel);
 
         // Populate views with property details
         locationTextView.setText("Location   :       "+propertyList.getLocation());
@@ -81,6 +85,14 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         addedDateTextView.setText("Added at   :       "+propertyList.getAddedDate());
         availableMonthTextView.setText("Availabe From   :       "+propertyList.getAvailableMonth());
         descriptionTextView.setText("Description   :       "+propertyList.getDescription());
+        conTextView.setText("Phone Number   :    " +propertyList.getUserPhone());
+
+        conlabel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                conTextView.setVisibility(View.VISIBLE);
+            }
+        });
 
         // Load property image using Glide
         Glide.with(this)

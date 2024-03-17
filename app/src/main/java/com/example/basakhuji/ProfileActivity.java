@@ -2,9 +2,7 @@ package com.example.basakhuji;
 
 import static android.content.ContentValues.TAG;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +14,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.maps.GoogleMap;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -25,11 +22,14 @@ import com.google.firebase.firestore.ListenerRegistration;
 import java.util.HashMap;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class ProfileActivity extends AppCompatActivity{
 
-
-    private static final float DEFAULT_ZOOM = 20;
-    private GoogleMap myMap;
     private String stringJavaScript = "<!DOCTYPE html>\n" +
             "<html>\n" +
             "  <body>\n" +
@@ -99,18 +99,13 @@ public class ProfileActivity extends AppCompatActivity{
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private ListenerRegistration userListener;
-    // creating constant keys for shared preferences.
-    public static final String SHARED_PREFS = "shared_prefs";
-
-    // key for storing email.
-    public static final String EMAIL_KEY = "email_key";
-
-    // key for storing password.
-    public static final String PASSWORD_KEY = "password_key";
-
-    // variable for shared preferences.
-    SharedPreferences sharedpreferences;
     String email;
+
+    private Retrofit retrofit;
+    private TextView temperatureTextView;
+    private TextView humidityTextView;
+    private TextView weatherConditionTextView;
+
 
 
     @Override
@@ -129,23 +124,13 @@ public class ProfileActivity extends AppCompatActivity{
             }
         });
 
-//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-//        mapFragment.getMapAsync(ProfileActivity.this);
-
 
         // Initialize Firebase components
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // initializing our shared preferences.
-        sharedpreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-
-        // getting data from shared prefs and
-        // storing it in our string variable.
-        email = sharedpreferences.getString("EMAIL_KEY", null);
 
 
-        // Find views
         usernameTextView = findViewById(R.id.usernameTextView);
         usernameEditText = findViewById(R.id.usernameEditText);
         fullNameEditText = findViewById(R.id.fullNameEditText);
@@ -170,21 +155,66 @@ public class ProfileActivity extends AppCompatActivity{
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // calling method to edit values in shared prefs.
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-
-                // below line will clear
-                // the data in shared prefs.
-                editor.clear();
-
-                // below line will apply empty
-                // data to shared prefs.
-                editor.apply();
 
                 logoutUser();
             }
         });
+
+        // Initialize Retrofit instance
+        retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.openweathermap.org/data/2.5/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        // Initialize UI elements
+        temperatureTextView = findViewById(R.id.temperatureTextView);
+        humidityTextView = findViewById(R.id.humidityTextView);
+        weatherConditionTextView = findViewById(R.id.weatherConditionTextView);
+
+        // Fetch weather data when activity starts
+        fetchWeatherData();
+
     }
+
+    private void fetchWeatherData() {
+        // Create API service interface using Retrofit
+        WeatherApiService apiService = retrofit.create(WeatherApiService.class);
+
+        // Make API call to fetch weather data
+        Call<WeatherResponse> call = apiService.getWeather("Chittagong", "15a7403ff94164b39a76008df5594957");
+        call.enqueue(new Callback<WeatherResponse>() {
+            @Override
+            public void onResponse(Call<WeatherResponse> call, Response<WeatherResponse> response) {
+                if (response.isSuccessful()) {
+                    WeatherResponse weatherResponse = response.body();
+
+                    // Extract weather information from response
+                    double temperatureKelvin = weatherResponse.getMain().getTemp();
+                    double temperatureCelsius = temperatureKelvin - 273.15;
+                    double humidity = weatherResponse.getMain().getHumidity();
+                    String weatherCondition = "";
+                    if (weatherResponse != null && weatherResponse.getWeather() != null && !weatherResponse.getWeather().isEmpty()) {
+                        weatherCondition = weatherResponse.getWeather().get(0).getDescription();
+                    }
+
+                    // Update UI with weather information
+                    temperatureTextView.setText("Temperature: " + String.format("%.2f", temperatureCelsius) + "°C");
+                    humidityTextView.setText("Humidity: " + humidity + "%");
+                    weatherConditionTextView.setText("Weather: " + weatherCondition);
+                } else {
+                    // Handle unsuccessful API response
+                    Toast.makeText(ProfileActivity.this, "Failed to fetch weather data", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WeatherResponse> call, Throwable t) {
+                Log.e(TAG, "error to fetch");
+            }
+
+        });
+    }
+
 
     public void buttonPlayYouTubeVideo(View view) {
         webView.loadData(stringJavaScript, "text/html", "utf-8");
@@ -194,22 +224,14 @@ public class ProfileActivity extends AppCompatActivity{
     protected void onStart() {
         super.onStart();
 
-//        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//
-//        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//            Toast.makeText(this, "Please enable location services", Toast.LENGTH_SHORT).show();
-//            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-//        }
-
         // Check if user is signed in (non-null) and update UI accordingly
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
-            // If user is not signed in, navigate back to login screen
+
             startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
             finish();
         } else {
-            // If user is signed in, display username and user details
-            //usernameTextView.setText("Username: " + currentUser.getDisplayName());
+
             displayUserDetails(currentUser.getUid());
         }
     }
@@ -228,7 +250,6 @@ public class ProfileActivity extends AppCompatActivity{
         userListener = db.collection("users").document(userId)
                 .addSnapshotListener(this, (documentSnapshot, e) -> {
                     if (e != null) {
-                        // Handle error
                         return;
                     }
 
@@ -279,7 +300,6 @@ public class ProfileActivity extends AppCompatActivity{
     private void logoutUser() {
 
         mAuth.signOut();
-        // Navigate back to login screen
         startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
         finish();
     }

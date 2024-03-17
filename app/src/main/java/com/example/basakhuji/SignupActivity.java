@@ -58,7 +58,6 @@ public class SignupActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Check username existence in real-time as the user types
                 checkUsernameAvailability(s.toString());
             }
 
@@ -87,11 +86,11 @@ public class SignupActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    // Sign up success, send verification email
+
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     sendEmailVerification(user);
                                 } else {
-                                    // If sign up fails, display a message to the user.
+
                                     Toast.makeText(SignupActivity.this, "Failed to register user: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -102,7 +101,7 @@ public class SignupActivity extends AppCompatActivity {
         loginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Navigate to the login activity
+
                 startActivity(new Intent(SignupActivity.this, LoginActivity.class));
                 finish();
             }
@@ -121,14 +120,13 @@ public class SignupActivity extends AppCompatActivity {
                             if (!task.getResult().isEmpty()) {
                                 // Username already exists
                                 unameEditText.setError("Username already exists");
-                                // You can also disable the sign-up button or provide other feedback to the user
+
                             } else {
-                                // Username is available
-                                // Clear any previous error
+
                                 unameEditText.setError(null);
                             }
                         } else {
-                            // Handle errors
+
                             Toast.makeText(SignupActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -142,12 +140,12 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    // Email verification sent successfully
+
                     Toast.makeText(SignupActivity.this, "Verification email sent. Please check your email.", Toast.LENGTH_SHORT).show();
                     // Store user details in Firestore
                     storeUserDetails();
                 } else {
-                    // Failed to send verification email
+                    
                     Toast.makeText(SignupActivity.this, "Failed to send verification email: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }

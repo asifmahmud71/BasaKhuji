@@ -101,90 +101,35 @@
         android:textSize="16dp"
         />
 
-<!--<LinearLayout-->
-<!--    android:id="@+id/linearLikeDislike"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="wrap_content"-->
-<!--    android:orientation="horizontal"-->
-<!--    android:layout_below="@+id/descriptionTextView"-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/conLabel"
+        android:layout_below="@+id/descriptionTextView"
+        android:text="Contact Information"
+        android:textSize="20dp"
+        android:textStyle="bold"/>
 
-<!--    >-->
-<!--    <LinearLayout-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="vertical"-->
-<!--        >-->
-<!--        <TextView-->
-<!--            android:id="@+id/likeCountTextView"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="8dp"-->
-<!--            android:layout_marginStart="10dp"-->
-<!--            android:text="Likes: 0" />-->
-
-<!--        <Button-->
-<!--            android:id="@+id/likeButton"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:text="Like" />-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/conTextView"
+        android:layout_below="@+id/conLabel"
+        android:textSize="16dp"
+        android:backgroundTint="#ACA7A7"
+        android:visibility="invisible"
+        />
 
 
-<!--    </LinearLayout>-->
 
-<!--<LinearLayout-->
-<!--    android:layout_width="wrap_content"-->
-<!--    android:layout_height="wrap_content"-->
-<!--    android:orientation="vertical"-->
-
-<!--    >-->
-<!--    <TextView-->
-<!--        android:id="@+id/dislikeCountTextView"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        android:layout_marginLeft="70dp"-->
-<!--        android:text="Dislikes: 0" />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/dislikeButton"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginHorizontal="60dp"-->
-<!--        android:layout_marginVertical="18dp"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        android:text="Dislike" />-->
-
-<!--</LinearLayout>-->
-
-<!--</LinearLayout>-->
-
-<!--    <RatingBar-->
-<!--        android:id="@+id/ratingBar"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@id/descriptionTextView"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:numStars="5"-->
-<!--        android:stepSize="1"-->
-<!--        android:rating="0"-->
-<!--        android:isIndicator="false"/>-->
-
-<!--    <Button-->
-<!--        android:id="@+id/submitRatingButton"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@id/ratingBar"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:text="Submit Rating"/>-->
-
+    <!-- Like and Dislike -->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/descriptionTextView"
-        android:layout_marginTop="10dp"
+        android:layout_below="@+id/conTextView"
+        android:layout_marginTop="20dp"
         android:layout_marginStart="10dp"
         android:gravity="center_vertical">
 

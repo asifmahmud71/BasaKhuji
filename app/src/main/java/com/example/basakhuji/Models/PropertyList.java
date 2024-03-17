@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class PropertyList implements Serializable {
-    private String imageUrl, category, flatType, location, price, description, addedDate, availableMonth, id, beds, baths;
+    private String imageUrl, category, flatType, location, price, description, addedDate, availableMonth, id, beds, baths, userPhone;
     public PropertyList() {
         // Default constructor required for Firestore
     }
@@ -16,7 +16,7 @@ public class PropertyList implements Serializable {
     private List<String> dislikedBy;
 
 
-    public PropertyList(String imageUrl, String category, String flatType, String location, String price, String addedDate, String availableMonth, String description, String id, String beds, String baths) {
+    public PropertyList(String imageUrl, String category, String flatType, String location, String price, String addedDate, String availableMonth, String description, String id, String beds, String baths, String userPhone) {
         this.id = id;
         this.price = price;
         this.category = category;
@@ -28,6 +28,7 @@ public class PropertyList implements Serializable {
         this.description = description;
         this.beds = beds;
         this.baths = baths;
+        this.userPhone = userPhone;
     }
 
 
@@ -153,5 +154,11 @@ public class PropertyList implements Serializable {
                 '}';
     }
 
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
+    }
 
+    public String getUserPhone() {
+        return userPhone;
+    }
 }

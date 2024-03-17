@@ -58,12 +58,9 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Add logic for login here
                 email = emailEditText.getText().toString().trim();
                 password = passwordEditText.getText().toString().trim();
 
-                // TODO: 24-Feb-24
-                //check email and pass null or not
                 if (email.isEmpty() && password.isEmpty()) {
                     Toast.makeText(LoginActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
                 }else {
@@ -88,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             Toast.makeText(LoginActivity.this, "Successfully logged in",
@@ -98,8 +95,6 @@ public class LoginActivity extends AppCompatActivity {
                             SharedPreferences.Editor  editor = sharedpreferences.edit();
                             // below two lines will put values for
                             // email and password in shared preferences.
-                            //Toast.makeText(LoginActivity.this, email, Toast.LENGTH_LONG).show();
-
                             editor.putString(EMAIL_KEY,email);
                             // to save our data with key and value.
                             editor.apply();
@@ -107,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
                         } else {
-                            // If sign in fails, display a message to the user.
+
                             Toast.makeText(LoginActivity.this, "Log in failed.",
                                     Toast.LENGTH_SHORT).show();
                         }

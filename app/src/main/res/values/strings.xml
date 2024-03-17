@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">BasaKhuji</string>
     <string-array name="category_options">
+        <item>Select Category</item>
         <item>Bachelor</item>
         <item>Family</item>
         <item>Sublet</item>
