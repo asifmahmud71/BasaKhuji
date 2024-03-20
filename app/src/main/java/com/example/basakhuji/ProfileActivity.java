@@ -9,6 +9,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -116,7 +117,16 @@ public class ProfileActivity extends AppCompatActivity{
         webView = findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
 
+        ImageView backButton = findViewById(R.id.backButton);
+
         map_btn = findViewById(R.id.map_btn);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         map_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

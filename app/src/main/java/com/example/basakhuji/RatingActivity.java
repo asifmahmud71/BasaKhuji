@@ -49,10 +49,18 @@ public class RatingActivity extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
+        ImageView backButton = findViewById(R.id.backButton);
         AppCompatButton ratingButton = findViewById(R.id.ratingButton);
         ratingsLayout = findViewById(R.id.commentsLayout);
         ImageView nextButton = findViewById(R.id.nextButton);
         ImageView prevButton = findViewById(R.id.prevButton);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         ratingButton.setOnClickListener(new View.OnClickListener() {
             @Override

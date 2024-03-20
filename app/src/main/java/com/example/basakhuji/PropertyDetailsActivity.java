@@ -58,6 +58,7 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         }
 
         // Bind views
+        ImageView backButton = findViewById(R.id.backButton);
         TextView locationTextView = findViewById(R.id.locationTextView);
         TextView categoryTextView = findViewById(R.id.categoryTextView);
         TextView flatTypeTextView = findViewById(R.id.flatTypeTextView);
@@ -86,6 +87,14 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         availableMonthTextView.setText("Availabe From   :       "+propertyList.getAvailableMonth());
         descriptionTextView.setText("Description   :       "+propertyList.getDescription());
         conTextView.setText("Phone Number   :    " +propertyList.getUserPhone());
+
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         conlabel.setOnClickListener(new View.OnClickListener() {
             @Override

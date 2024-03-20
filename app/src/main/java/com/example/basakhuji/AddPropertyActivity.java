@@ -66,6 +66,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         calendar = Calendar.getInstance();
 
+        ImageView backButton = findViewById(R.id.backButton);
         storageReference = FirebaseStorage.getInstance().getReference();
         locationEditText = findViewById(R.id.locationEditText);
         bedsEditText = findViewById(R.id.bedsEditText);
@@ -77,6 +78,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         categorySpinner = findViewById(R.id.categorySpinner);
         flatTypeSpinner = findViewById(R.id.flatTypeSpinner);
         imagePreview = findViewById(R.id.imagePreview);
+
 
         findViewById(R.id.flatTypeLabel).setVisibility(View.GONE);
         flatTypeSpinner.setVisibility(View.GONE);
@@ -113,6 +115,13 @@ public class AddPropertyActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
 
