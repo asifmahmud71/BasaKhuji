@@ -158,7 +158,7 @@ public class AddPropertyActivity extends AppCompatActivity {
                 if (documentSnapshot.exists()) {
                     String phoneNumber = documentSnapshot.getString("phoneNumber");
 
-                    // Create property object with userPhone included
+                    // Create property object
                     Map<String, Object> property = new HashMap<>();
                     property.put("location", locationEditText.getText().toString().trim());
                     property.put("beds", bedsEditText.getText().toString().trim());

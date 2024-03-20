@@ -135,6 +135,14 @@ public class PropertyList implements Serializable {
         this.dislikedBy = dislikedBy;
     }
 
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
+    }
+
+    public String getUserPhone() {
+        return userPhone;
+    }
+
 
     @NonNull
     @Override
@@ -154,11 +162,4 @@ public class PropertyList implements Serializable {
                 '}';
     }
 
-    public void setUserPhone(String userPhone) {
-        this.userPhone = userPhone;
-    }
-
-    public String getUserPhone() {
-        return userPhone;
-    }
 }

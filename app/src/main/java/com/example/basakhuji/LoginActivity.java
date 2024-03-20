@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -81,34 +82,37 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginUser(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener() {
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onComplete(@NonNull Task task) {
+                    public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
                             FirebaseUser user = mAuth.getCurrentUser();
+                            if (user != null && user.isEmailVerified()) {
+                                Toast.makeText(LoginActivity.this, "Successfully logged in",
+                                        Toast.LENGTH_SHORT).show();
 
-                            Toast.makeText(LoginActivity.this, "Successfully logged in",
-                                    Toast.LENGTH_SHORT).show();
+                                // Save email to SharedPreferences
+                                SharedPreferences.Editor editor = sharedpreferences.edit();
+                                editor.putString(EMAIL_KEY, email);
+                                editor.apply();
 
-
-                            SharedPreferences.Editor  editor = sharedpreferences.edit();
-                            // below two lines will put values for
-                            // email and password in shared preferences.
-                            editor.putString(EMAIL_KEY,email);
-                            // to save our data with key and value.
-                            editor.apply();
-
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            finish();
+                                // Proceed to MainActivity
+                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                finish();
+                            } else {
+                                // If email is not verified, show a toast and don't proceed
+                                Toast.makeText(LoginActivity.this, "Email not verified. Please verify your email.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         } else {
-
-                            Toast.makeText(LoginActivity.this, "Log in failed.",
+                            // If login fails, show a toast
+                            Toast.makeText(LoginActivity.this, "Login failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
+
 
     @Override
     protected void onStart() {

@@ -24,6 +24,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
+import android.util.Patterns;
+
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -72,13 +74,20 @@ public class SignupActivity extends AppCompatActivity {
                 String fullName = fullNameEditText.getText().toString().trim();
                 String username = unameEditText.getText().toString().trim();
                 String email = signUpEmailEditText.getText().toString().trim();
-                String phoneNumber = phonenumberEditText.getText().toString().trim();
+                //String phoneNumber = phonenumberEditText.getText().toString().trim();
                 String password = signUpPasswordEditText.getText().toString().trim();
+                String phoneNumber = phonenumberEditText.getText().toString().trim();
+                if (!isValidPhoneNumber(phoneNumber)) {
+                    // If phone number is not valid, show error message
+                    phonenumberEditText.setError("Invalid phone number");
+                    return;
+                }
 
                 if (fullName.isEmpty() || username.isEmpty() || email.isEmpty() || phoneNumber.isEmpty() || password.isEmpty()) {
                     Toast.makeText(SignupActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
 
                 // Create user with email and password
                 mAuth.createUserWithEmailAndPassword(email, password)
@@ -107,6 +116,14 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
     }
+
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        // Use a regular expression pattern to validate phone number
+        // 11 digits with a leading zero
+        String phoneNumberPattern = "^0[0-9]{10}$";
+        return phoneNumber.matches(phoneNumberPattern);
+    }
+
 
 
     private void checkUsernameAvailability(final String username) {

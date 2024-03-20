@@ -88,13 +88,6 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
                     .error(R.drawable.error_image)
                     .into(propertyImageView);
 
-
-//            // Set like button icon based on like status
-//            if (property.isLiked()) {
-//                likeButton.setImageResource(R.drawable.liked);
-//            } else {
-//                likeButton.setImageResource(R.drawable.like); // Change to your default like icon
-//            }
         }
 
     }

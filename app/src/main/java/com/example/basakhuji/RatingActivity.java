@@ -1,11 +1,14 @@
 package com.example.basakhuji;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -48,8 +51,8 @@ public class RatingActivity extends AppCompatActivity {
 
         AppCompatButton ratingButton = findViewById(R.id.ratingButton);
         ratingsLayout = findViewById(R.id.commentsLayout);
-        Button nextButton = findViewById(R.id.nextButton);
-        Button prevButton = findViewById(R.id.prevButton);
+        ImageView nextButton = findViewById(R.id.nextButton);
+        ImageView prevButton = findViewById(R.id.prevButton);
 
         ratingButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,31 +210,32 @@ public class RatingActivity extends AppCompatActivity {
         pageLayout.removeAllViews();
 
         for (int i = 0; i < totalPages; i++) {
-            Button button = new Button(this);
-            button.setText(String.valueOf(i + 1));
-            button.setTag(i);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    currentPage = (int) v.getTag();
-                    loadRatingsAndComments();
-                }
-            });
-
-            if (i == currentPage) {
-                button.setEnabled(false); // Disable the current page button
-            }
+            TextView textView = new TextView(this);
+            textView.setText(String.valueOf(i + 1));
+            textView.setPadding(16, 8, 16, 8);
+            textView.setBackgroundResource(R.drawable.round_background);
+            textView.setTextColor(Color.BLACK);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+            textView.setGravity(Gravity.CENTER);
+            textView.setHeight(100);
+            textView.setWidth(100);
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
             layoutParams.setMargins(8, 0, 8, 0);
-            button.setLayoutParams(layoutParams);
+            textView.setLayoutParams(layoutParams);
 
-            pageLayout.addView(button);
+            if (i == currentPage) {
+                // Set blue color for current page
+                textView.setTextColor(Color.WHITE);
+            }
+
+            pageLayout.addView(textView);
         }
     }
+
 
 
 }
