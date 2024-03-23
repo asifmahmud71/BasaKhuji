@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
                         adapter = new PropertyAdapter(this, propertyList);
                         recyclerView.setAdapter(adapter);
-                        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+                        recyclerView.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
                     } else {
                         Toast.makeText(MainActivity.this, "No data available", Toast.LENGTH_SHORT).show();
                     }
