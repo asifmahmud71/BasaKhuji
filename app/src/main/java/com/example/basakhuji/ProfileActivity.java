@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -95,7 +96,8 @@ public class ProfileActivity extends AppCompatActivity{
 
     private TextView usernameTextView;
     private EditText fullNameEditText, emailEditText, phoneNumberEditText, usernameEditText;
-    private Button updateButton, logoutButton, map_btn;
+    private Button updateButton;
+    private AppCompatButton logoutButton, map_btn;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -225,14 +227,11 @@ public class ProfileActivity extends AppCompatActivity{
         });
     }
 
-
-    public void buttonPlayYouTubeVideo(View view) {
-        webView.loadData(stringJavaScript, "text/html", "utf-8");
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
+
+        webView.loadData(stringJavaScript, "text/html", "utf-8");
 
         // Check if user is signed in (non-null) and update UI accordingly
         FirebaseUser currentUser = mAuth.getCurrentUser();

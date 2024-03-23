@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,19 +42,18 @@ import java.util.UUID;
 public class AddPropertyActivity extends AppCompatActivity {
 
 
-    private EditText locationEditText, bedsEditText, bathsEditText, priceEditText, descriptionEditText;
+    private EditText divisionEditText, bedsEditText, bathsEditText, priceEditText, descriptionEditText, districtEditText, areaEditText, subAreaEditText;
     private TextView addedDateTextView;
     private Spinner categorySpinner, flatTypeSpinner, availableMonthSpinner;
     private FirebaseFirestore db;
     private Calendar calendar;
 
     private static final int PICK_IMAGES_REQUEST = 1;
-    private ArrayList<Uri> selectedImages;
-    private LinearLayout imagePreviewLayout;
+
     private ImageView imagePreview;
     StorageReference storageReference;
     Uri imageUri;
-    String phoneNumber;
+
 
 
     @SuppressLint("MissingInflatedId")
@@ -68,7 +67,11 @@ public class AddPropertyActivity extends AppCompatActivity {
 
         ImageView backButton = findViewById(R.id.backButton);
         storageReference = FirebaseStorage.getInstance().getReference();
-        locationEditText = findViewById(R.id.locationEditText);
+
+        divisionEditText = findViewById(R.id.divisionEditText);
+        districtEditText = findViewById(R.id.districtEditText);
+        areaEditText = findViewById(R.id.areaEditText);
+        subAreaEditText = findViewById(R.id.subAreaEditText);
         bedsEditText = findViewById(R.id.bedsEditText);
         bathsEditText = findViewById(R.id.bathsEditText);
         availableMonthSpinner = findViewById(R.id.availableMonthSpinner);
@@ -125,7 +128,7 @@ public class AddPropertyActivity extends AppCompatActivity {
             }
         });
 
-        Button submitButton = findViewById(R.id.submitButton);
+        AppCompatButton submitButton = findViewById(R.id.submitButton);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,7 +172,10 @@ public class AddPropertyActivity extends AppCompatActivity {
 
                     // Create property object
                     Map<String, Object> property = new HashMap<>();
-                    property.put("location", locationEditText.getText().toString().trim());
+                    property.put("division", divisionEditText.getText().toString().trim());
+                    property.put("district", districtEditText.getText().toString().trim());
+                    property.put("area", areaEditText.getText().toString().trim());
+                    property.put("subArea", subAreaEditText.getText().toString().trim());
                     property.put("beds", bedsEditText.getText().toString().trim());
                     property.put("baths", bathsEditText.getText().toString().trim());
                     property.put("category", categorySpinner.getSelectedItem().toString());

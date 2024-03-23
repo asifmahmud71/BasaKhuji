@@ -220,6 +220,7 @@ public class RatingActivity extends AppCompatActivity {
         for (int i = 0; i < totalPages; i++) {
             TextView textView = new TextView(this);
             textView.setText(String.valueOf(i + 1));
+            textView.setTag(i);
             textView.setPadding(16, 8, 16, 8);
             textView.setBackgroundResource(R.drawable.round_background);
             textView.setTextColor(Color.BLACK);
@@ -227,6 +228,14 @@ public class RatingActivity extends AppCompatActivity {
             textView.setGravity(Gravity.CENTER);
             textView.setHeight(100);
             textView.setWidth(100);
+
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    currentPage = (int) v.getTag();
+                    loadRatingsAndComments();
+                }
+            });
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,

@@ -6,31 +6,9 @@ import java.io.Serializable;
 import java.util.List;
 
 public class PropertyList implements Serializable {
-    private String imageUrl, category, flatType, location, price, description, addedDate, availableMonth, id, beds, baths, userPhone;
-    public PropertyList() {
-        // Default constructor required for Firestore
-    }
-
-
+    private String imageUrl, category, flatType, division, district, area, subArea, price, description, addedDate, availableMonth, id, beds, baths, userPhone;
     private List<String> likedBy;
     private List<String> dislikedBy;
-
-
-    public PropertyList(String imageUrl, String category, String flatType, String location, String price, String addedDate, String availableMonth, String description, String id, String beds, String baths, String userPhone) {
-        this.id = id;
-        this.price = price;
-        this.category = category;
-        this.flatType = flatType;
-        this.location = location;
-        this.imageUrl = imageUrl;
-        this.addedDate = addedDate;
-        this.availableMonth = availableMonth;
-        this.description = description;
-        this.beds = beds;
-        this.baths = baths;
-        this.userPhone = userPhone;
-    }
-
 
     public String getId() {
         return id;
@@ -64,12 +42,36 @@ public class PropertyList implements Serializable {
         this.flatType = flatType;
     }
 
-    public String getLocation() {
-        return location;
+    public String getDivision() {
+        return division;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setDivision(String division) {
+        this.division = division;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getSubArea() {
+        return subArea;
+    }
+
+    public void setSubArea(String subArea) {
+        this.subArea = subArea;
     }
 
     public String getPrice() {
@@ -141,25 +143,6 @@ public class PropertyList implements Serializable {
 
     public String getUserPhone() {
         return userPhone;
-    }
-
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "PropertyList{" +
-                "imageUrl='" + imageUrl + '\'' +
-                ", category='" + category + '\'' +
-                ", flatType='" + flatType + '\'' +
-                ", location='" + location + '\'' +
-                ", price='" + price + '\'' +
-                ", description='" + description + '\'' +
-                ", addedDate='" + addedDate + '\'' +
-                ", availableMonth='" + availableMonth + '\'' +
-                ", id='" + id + '\'' +
-                ", beds=" + beds +
-                ", baths=" + baths +
-                '}';
     }
 
 }

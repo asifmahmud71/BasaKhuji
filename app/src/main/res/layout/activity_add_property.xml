@@ -32,8 +32,19 @@
             android:text="Add Property"
             android:textSize="23sp"
             android:textStyle="bold"
-            android:layout_gravity="center"
+            android:layout_gravity=""
             android:textColor="@android:color/white"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/submitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background"
+            android:layout_gravity="end"
+            android:layout_marginEnd="12dp"
+            android:text="Submit"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -46,25 +57,137 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <!-- Location -->
-    <TextView
-        android:id="@+id/locationLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Location"
-        android:textSize="18sp"
-        android:layout_marginTop="16dp"/>
-
-    <EditText
-        android:id="@+id/locationEditText"
+    <LinearLayout
+        android:id="@+id/dd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/locationLabel"
-        android:layout_marginTop="8dp"
-        android:hint="Enter location"
-        android:inputType="text"
-        android:background="@drawable/edit_text_background"
-        android:padding="12dp"/>
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <!-- Division -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/divisionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Division"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"/>
+
+            <EditText
+                android:id="@+id/divisionEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Enter division"
+                android:inputType="text"
+                android:background="@drawable/edit_text_background"
+                android:padding="12dp"/>
+
+        </LinearLayout>
+
+        <!-- District -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/districtLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="District"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"/>
+
+            <EditText
+                android:id="@+id/districtEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Enter district"
+                android:inputType="text"
+                android:background="@drawable/edit_text_background"
+                android:padding="12dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/area"
+        android:layout_below="@+id/dd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <!-- Area -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/areaLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Area"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"/>
+
+            <EditText
+                android:id="@+id/areaEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Enter area"
+                android:inputType="text"
+                android:background="@drawable/edit_text_background"
+                android:padding="12dp"/>
+
+        </LinearLayout>
+
+        <!-- Sub Area -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/subAreaLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sub Area"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"/>
+
+            <EditText
+                android:id="@+id/subAreaEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Enter sub area"
+                android:inputType="text"
+                android:background="@drawable/edit_text_background"
+                android:padding="12dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 
     <!-- Beds -->
     <TextView
@@ -73,7 +196,7 @@
         android:layout_height="wrap_content"
         android:text="Beds"
         android:textSize="18sp"
-        android:layout_below="@id/locationEditText"
+        android:layout_below="@id/area"
         android:layout_marginTop="16dp"/>
 
     <EditText
@@ -268,25 +391,8 @@
             android:src="@mipmap/ic_launcher_round"
             tools:ignore="ContentDescription" />
 
-        <!-- Image views for preview -->
-        <!-- You can add ImageView elements dynamically here using Java code -->
 
     </LinearLayout>
-
-    <!-- Submit button -->
-    <Button
-        android:id="@+id/submitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/imagePreviewLayout"
-        android:layout_marginLeft="150dp"
-        android:layout_marginTop="38dp"
-        android:background="@drawable/button_background"
-        android:gravity="center"
-        android:padding="12dp"
-        android:text="Submit"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp" />
 
 
 </RelativeLayout>

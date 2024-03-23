@@ -15,8 +15,6 @@ import com.bumptech.glide.Glide;
 import com.example.basakhuji.Models.PropertyList;
 import com.example.basakhuji.PropertyDetailsActivity;
 import com.example.basakhuji.R;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,27 +56,22 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
     }
 
    static class PropertyViewHolder extends RecyclerView.ViewHolder {
-        TextView categoryFlatTypeTextView, locationTextView, likeTextView;
-        ImageView propertyImageView, likeButton;
-
-        FirebaseFirestore firestore;
-        FirebaseUser currentUser;
-       private String id;
+        TextView categoryFlatTypeTextView, locationTextView;
+        ImageView propertyImageView;
 
         public PropertyViewHolder(@NonNull View itemView) {
             super(itemView);
             categoryFlatTypeTextView = itemView.findViewById(R.id.categoryFlatTypeTextView);
             locationTextView = itemView.findViewById(R.id.locationTextView);
             propertyImageView = itemView.findViewById(R.id.propertyImageView);
-            likeButton = itemView.findViewById(R.id.like_btn);
-            likeTextView = itemView.findViewById(R.id.like_text);
         }
 
         public void bind(PropertyList property) {
             // Display property details
             String categoryFlatType = property.getCategory() + " " + property.getFlatType();
             categoryFlatTypeTextView.setText(categoryFlatType);
-            locationTextView.setText(property.getLocation());
+            String location = property.getArea() + ", " + property.getDistrict();
+            locationTextView.setText(location);
 
 
             // Load property image using Glide

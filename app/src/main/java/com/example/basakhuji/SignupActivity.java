@@ -53,6 +53,49 @@ public class SignupActivity extends AppCompatActivity {
         loginTextView = findViewById(R.id.loginTextView);
 
 
+        signUpEmailEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!isValidEmail(s.toString())) {
+                    signUpEmailEditText.setError("Invalid email address");
+                    signUpButton.setEnabled(false);
+                } else {
+                    signUpEmailEditText.setError(null);
+                    signUpButton.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        phonenumberEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!isValidPhoneNumber(s.toString())) {
+                    phonenumberEditText.setError("Invalid phone number");
+                    signUpButton.setEnabled(false);
+                } else {
+                    phonenumberEditText.setError(null);
+                    signUpButton.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+
         unameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -115,6 +158,10 @@ public class SignupActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private boolean isValidEmail(String email) {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     private boolean isValidPhoneNumber(String phoneNumber) {

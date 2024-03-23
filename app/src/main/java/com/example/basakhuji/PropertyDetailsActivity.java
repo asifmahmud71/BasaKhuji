@@ -50,16 +50,17 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("property")) {
             propertyList = (PropertyList) intent.getSerializableExtra("property");
-            //Log.d("PropertyDetailsActivity", "Property: " + propertyList.toString());
         } else {
-            //Log.e("PropertyDetailsActivity", "Intent or property is null");
-            finish(); // Close activity if property is null
+            finish();
             return;
         }
 
         // Bind views
         ImageView backButton = findViewById(R.id.backButton);
-        TextView locationTextView = findViewById(R.id.locationTextView);
+        TextView divisionTextView = findViewById(R.id.divisionTextView);
+        TextView districtTextView = findViewById(R.id.districtTextView);
+        TextView areaTextView = findViewById(R.id.areaTextView);
+        TextView subAreaTextView = findViewById(R.id.subAreaTextView);
         TextView categoryTextView = findViewById(R.id.categoryTextView);
         TextView flatTypeTextView = findViewById(R.id.flatTypeTextView);
         TextView priceTextView = findViewById(R.id.priceTextView);
@@ -77,7 +78,10 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         TextView conlabel = findViewById(R.id.conLabel);
 
         // Populate views with property details
-        locationTextView.setText("Location   :       "+propertyList.getLocation());
+        divisionTextView.setText("Division   :       "+propertyList.getDivision());
+        districtTextView.setText("District   :       "+propertyList.getDistrict());
+        areaTextView.setText("Area   :       "+propertyList.getArea());
+        subAreaTextView.setText("Sub Area   :       "+propertyList.getSubArea());
         categoryTextView.setText("Category   :      "+propertyList.getCategory());
         flatTypeTextView.setText("Type of Property   :       "+propertyList.getFlatType());
         beds.setText("Beds   :       "+propertyList.getBeds());

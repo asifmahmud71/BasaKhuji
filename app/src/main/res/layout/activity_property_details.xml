@@ -68,8 +68,29 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/locationTextView"
+        android:id="@+id/divisionTextView"
         android:layout_below="@+id/locationLabel"
+        android:textSize="16dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/districtTextView"
+        android:layout_below="@+id/divisionTextView"
+        android:textSize="16dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/areaTextView"
+        android:layout_below="@+id/districtTextView"
+        android:textSize="16dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/subAreaTextView"
+        android:layout_below="@+id/areaTextView"
         android:textSize="16dp"
         />
 
@@ -77,7 +98,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/basicLabel"
-        android:layout_below="@+id/locationTextView"
+        android:layout_below="@+id/subAreaTextView"
         android:text="Details Information"
         android:textSize="20dp"
         android:textStyle="bold"/>
@@ -134,7 +155,7 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_height="200dp"
         android:id="@+id/descriptionTextView"
         android:layout_below="@+id/availableMonthTextView"
         android:textSize="16dp"
