@@ -41,10 +41,14 @@ public class RatingActivity extends AppCompatActivity {
     private int currentPage = 0;
     private int totalPages = 0;
 
+    private TextClassificationViewModel textClassificationViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rating);
+
+        textClassificationViewModel = new TextClassificationViewModel(this);
 
         firestore = FirebaseFirestore.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -194,16 +198,36 @@ public class RatingActivity extends AppCompatActivity {
                             float rating = Float.parseFloat(String.valueOf(documentSnapshot.getDouble("rating")));
                             String comment = documentSnapshot.getString("comment");
 
+                            // Inflate the rating view layout
                             View ratingView = LayoutInflater.from(RatingActivity.this).inflate(R.layout.item_rating, null);
 
+                            // Find views inside the rating view layout
                             TextView userEmailTextView = ratingView.findViewById(R.id.userEmailTextView);
                             RatingBar ratingBar = ratingView.findViewById(R.id.ratingBar);
                             TextView commentTextView = ratingView.findViewById(R.id.commentTextView);
+                            TextView scoreTextView = ratingView.findViewById(R.id.scoreTextView);
 
+                            // Set user email and rating
                             userEmailTextView.setText(userEmail);
                             ratingBar.setRating(rating);
+
+                            // Call the classify method with the comment text and update the TextView background color
+                            List<Float> results = textClassificationViewModel.classify(comment);
+                            float score = results.isEmpty() ? 0 : results.get(0);
+
+                            // Update TextView background color based on negativity
+                            if (score < 0.5) { // Adjust the threshold here
+                                commentTextView.setBackgroundColor(Color.GREEN);
+                            } else {
+                                commentTextView.setBackgroundColor(Color.RED);
+                            }
+
+                            // Set comment text
                             commentTextView.setText(comment);
 
+                            scoreTextView.setText(String.format("%.2f", score));
+
+                            // Add the rating view to the ratings layout
                             ratingsLayout.addView(ratingView);
                         }
 
@@ -212,6 +236,7 @@ public class RatingActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
     private void updatePageNumbers() {
         LinearLayout pageLayout = findViewById(R.id.pageLayout);
