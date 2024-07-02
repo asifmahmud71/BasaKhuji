@@ -102,89 +102,32 @@
             android:padding="10dp"
             android:textColor="@color/black" />
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/LinearLayout_Email"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:gravity="center"-->
-<!--        android:orientation="vertical">-->
-<!--        &lt;!&ndash; Add EditText for verification code &ndash;&gt;-->
-<!--        <EditText-->
-<!--            android:id="@+id/verificationCodeEditText"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:layout_marginTop="30dp"-->
-<!--            android:background="@drawable/border"-->
-<!--            android:drawablePadding="12dp"-->
-<!--            android:enabled="false"-->
-<!--            android:hint="Verification Code"-->
-<!--            android:inputType="text"-->
-<!--            android:padding="10dp"-->
-<!--            android:textColor="@color/black" /> &lt;!&ndash; Initially disabled &ndash;&gt;-->
 
-<!--        &lt;!&ndash; Add Button to submit verification code &ndash;&gt;-->
-<!--        <Button-->
-<!--            android:id="@+id/verifyButton"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:layout_marginTop="15dp"-->
-<!--            android:enabled="false"-->
-<!--            android:text="VERIFY"-->
-<!--            android:textSize="18dp" /> &lt;!&ndash; Initially disabled &ndash;&gt;-->
-<!--    </LinearLayout>-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
 
-<!--        <LinearLayout-->
-<!--            android:visibility="gone"-->
-<!--            android:id="@+id/LinearLayout_PinView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:gravity="center"-->
-<!--            android:orientation="vertical">-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select Country"
+                android:textSize="16sp"
+                android:textColor="#A7A2A1"
+                android:layout_gravity="start"
+                />
 
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="OTP verification"-->
-<!--                android:textColor="@android:color/holo_orange_dark"-->
-<!--                android:textSize="25sp"-->
-<!--                android:textStyle="bold" />-->
+            <Spinner
+                android:id="@+id/countrySpinner"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="1dp"
+                android:background="@drawable/border"
+                android:padding="10dp"
+                android:textColor="#A7A2A1" />
 
-<!--            <com.chaos.view.PinView-->
-<!--                android:id="@+id/firstPinView"-->
-<!--                style="@style/PinWidget.PinView"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_marginTop="30dp"-->
-<!--                android:cursorVisible="true"-->
-<!--                android:inputType="number"-->
-<!--                android:itemBackground="#FFFFF7"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textSize="18sp"-->
-<!--                android:textStyle="bold"-->
-<!--                app:cursorColor="@color/black"-->
-<!--                app:cursorWidth="2dp"-->
-<!--                app:hideLineWhenFilled="true"-->
-<!--                app:itemCount="4"-->
-<!--                app:itemHeight="45dp"-->
-<!--                app:itemRadius="4dp"-->
-<!--                app:itemWidth="45dp"-->
-<!--                app:lineColor="@color/black"-->
-<!--                app:lineWidth="2dp"-->
-<!--                app:viewType="rectangle" />-->
-
-<!--            <Button-->
-<!--                android:id="@+id/signup_confirm"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="25dp"-->
-<!--                android:background="@drawable/button_background"-->
-<!--                android:text="Confirm"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:textSize="18sp" />-->
-
-<!--        </LinearLayout>-->
+        </LinearLayout>
 
         <Button
             android:id="@+id/signUpButton"

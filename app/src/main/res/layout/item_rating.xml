@@ -14,20 +14,21 @@
         android:textColor="#00897B"
         android:textSize="16sp"
         android:textStyle="bold"/>
+
     <RatingBar
         android:id="@+id/ratingBar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:numStars="5"
-        android:rating="0"
-        android:stepSize="1"
+        android:layout_height="44dp"
+        android:layout_marginStart="-80dp"
         android:isIndicator="true"
+        android:numStars="5"
+        android:paddingStart="-4dp"
+        android:rating="0"
         android:scaleX="0.3"
         android:scaleY="0.3"
-        android:paddingStart="-4dp"
-        android:layout_marginStart="-80dp"
+        android:stepSize="1"
 
-    />
+        />
 
 
     <LinearLayout
@@ -44,7 +45,7 @@
             <TextView
                 android:id="@+id/commentTextView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:textColor="@color/white"
                 android:text="Comment"/>
 

@@ -14,6 +14,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -31,7 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
+//import javax.annotation.Nullable;
 
 public class RatingActivity extends AppCompatActivity {
 
@@ -149,6 +150,22 @@ public class RatingActivity extends AppCompatActivity {
                         data.put("rating", rating);
                         data.put("comment", comment);
 
+                        // Call the classify method with the comment text to get positive and negative scores
+                        List<Float> results = textClassificationViewModel.classify(comment);
+                        float negativeScore = results.isEmpty() ? 0 : results.get(0);
+                        float positiveScore = results.size() > 1 ? results.get(1) : 0;
+
+                        if(positiveScore > negativeScore)
+                        {
+                            data.put("score", positiveScore);
+                            data.put("sentiment", "positive");
+                        }
+                        else {
+                            data.put("score", negativeScore);
+                            data.put("sentiment", "negative");
+                        }
+
+
                         ratingsRef.add(data)
                                 .addOnSuccessListener(documentReference -> {
                                     Toast.makeText(this, "Rating and comment saved successfully", Toast.LENGTH_SHORT).show();
@@ -195,6 +212,8 @@ public class RatingActivity extends AppCompatActivity {
                         for (int i = startIndex; i < endIndex; i++) {
                             DocumentSnapshot documentSnapshot = documents.get(i);
                             String userEmail = documentSnapshot.getString("userEmail");
+                            String sentiment = documentSnapshot.getString("sentiment");
+                            float score = Float.parseFloat(String.valueOf(documentSnapshot.getDouble("score")));
                             float rating = Float.parseFloat(String.valueOf(documentSnapshot.getDouble("rating")));
                             String comment = documentSnapshot.getString("comment");
 
@@ -211,23 +230,21 @@ public class RatingActivity extends AppCompatActivity {
                             userEmailTextView.setText(userEmail);
                             ratingBar.setRating(rating);
 
-                            // Call the classify method with the comment text and update the TextView background color
-                            List<Float> results = textClassificationViewModel.classify(comment);
-                            float score = results.isEmpty() ? 0 : results.get(0);
-
-                            // Update TextView background color based on negativity
-                            if (score < 0.5) { // Adjust the threshold here
+                            // Compare positive and negative scores to determine sentiment
+                            if ("positive".equals(sentiment)) {
+                                // Positive sentiment
+                                // Update TextView background color based on positivity
                                 commentTextView.setBackgroundColor(Color.GREEN);
+                                scoreTextView.setText(String.format("%.2f", score));
                             } else {
+                                // Negative sentiment
+                                // Update TextView background color based on negativity
                                 commentTextView.setBackgroundColor(Color.RED);
+                                scoreTextView.setText(String.format("%.2f", score));
                             }
 
-                            // Set comment text
                             commentTextView.setText(comment);
 
-                            scoreTextView.setText(String.format("%.2f", score));
-
-                            // Add the rating view to the ratings layout
                             ratingsLayout.addView(ratingView);
                         }
 

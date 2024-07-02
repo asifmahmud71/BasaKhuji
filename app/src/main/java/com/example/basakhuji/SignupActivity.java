@@ -3,16 +3,23 @@ package com.example.basakhuji;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.apollographql.apollo.ApolloClient;
+import com.apollographql.apollo.api.Response;
+import com.apollographql.apollo.rx2.Rx2Apollo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -22,9 +29,14 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import android.util.Patterns;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class SignupActivity extends AppCompatActivity {
@@ -36,6 +48,9 @@ public class SignupActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
+    private Spinner countrySpinner;
+    private ApolloClient apolloClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +59,10 @@ public class SignupActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
+        apolloClient = ApolloClient.builder()
+                .serverUrl("https://countries.trevorblades.com/graphql")
+                .build();
+
         signUpEmailEditText = findViewById(R.id.signUpEmailEditText);
         signUpPasswordEditText = findViewById(R.id.signUpPasswordEditText);
         phonenumberEditText = findViewById(R.id.phonenumberEditText);
@@ -51,6 +70,8 @@ public class SignupActivity extends AppCompatActivity {
         signUpButton = findViewById(R.id.signUpButton);
         fullNameEditText = findViewById(R.id.nameEditText);
         loginTextView = findViewById(R.id.loginTextView);
+
+        countrySpinner = findViewById(R.id.countrySpinner);
 
 
         signUpEmailEditText.addTextChangedListener(new TextWatcher() {
@@ -158,7 +179,32 @@ public class SignupActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        fetchCountries();
     }
+
+
+    private void fetchCountries() {
+        CountriesQuery countriesQuery = CountriesQuery.builder().build();
+        Rx2Apollo.from(apolloClient.query(countriesQuery))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Response<CountriesQuery.Data>>() {
+                    @Override
+                    public void accept(Response<CountriesQuery.Data> response) throws Exception {
+                        if (response.data() != null) {
+                            List<String> countryNames = new ArrayList<>();
+                            for (CountriesQuery.Country country : response.data().countries()) {
+                                countryNames.add(country.name());
+                            }
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(SignupActivity.this, android.R.layout.simple_spinner_item, countryNames);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            countrySpinner.setAdapter(adapter);
+                        }
+                    }
+                });
+    }
+
 
     private boolean isValidEmail(String email) {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
@@ -170,7 +216,6 @@ public class SignupActivity extends AppCompatActivity {
         String phoneNumberPattern = "^0[0-9]{10}$";
         return phoneNumber.matches(phoneNumberPattern);
     }
-
 
 
     private void checkUsernameAvailability(final String username) {
@@ -198,7 +243,6 @@ public class SignupActivity extends AppCompatActivity {
     }
 
 
-
     private void sendEmailVerification(FirebaseUser user) {
         user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -209,7 +253,7 @@ public class SignupActivity extends AppCompatActivity {
                     // Store user details in Firestore
                     storeUserDetails();
                 } else {
-                    
+
                     Toast.makeText(SignupActivity.this, "Failed to send verification email: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -221,6 +265,7 @@ public class SignupActivity extends AppCompatActivity {
         String username = unameEditText.getText().toString().trim();
         String email = signUpEmailEditText.getText().toString().trim();
         String phoneNumber = phonenumberEditText.getText().toString().trim();
+        String selectedCountry = countrySpinner.getSelectedItem().toString();
 
         String userId = mAuth.getCurrentUser().getUid();
         DocumentReference userRef = db.collection("users").document(userId);
@@ -230,6 +275,7 @@ public class SignupActivity extends AppCompatActivity {
         user.put("username", username);
         user.put("email", email);
         user.put("phoneNumber", phoneNumber);
+        user.put("country", selectedCountry);
 
         userRef.set(user)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
