@@ -78,21 +78,23 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         dislikeButton = findViewById(R.id.dislike_btn);
         dislikeTextView = findViewById(R.id.dislike_text);
         TextView conlabel = findViewById(R.id.conLabel);
+        TextView nameTextView = findViewById(R.id.nameTextView);
 
         // Populate views with property details
-        divisionTextView.setText("Division   :       "+propertyList.getDivision());
-        districtTextView.setText("District   :       "+propertyList.getDistrict());
-        areaTextView.setText("Area   :       "+propertyList.getArea());
-        subAreaTextView.setText("Sub Area   :       "+propertyList.getSubArea());
-        categoryTextView.setText("Category   :      "+propertyList.getCategory());
-        flatTypeTextView.setText("Type of Property   :       "+propertyList.getFlatType());
-        beds.setText("Beds   :       "+propertyList.getBeds());
-        baths.setText("Baths   :       "+propertyList.getBaths());
-        priceTextView.setText("Price   :       "+propertyList.getPrice());
-        addedDateTextView.setText("Added at   :       "+propertyList.getAddedDate());
-        availableMonthTextView.setText("Availabe From   :       "+propertyList.getAvailableMonth());
-        descriptionTextView.setText("Description   :       "+propertyList.getDescription());
-        conTextView.setText("Phone Number   :    " +propertyList.getUserPhone());
+        divisionTextView.setText(propertyList.getDivision());
+        districtTextView.setText(propertyList.getDistrict());
+        areaTextView.setText(propertyList.getArea());
+        subAreaTextView.setText(propertyList.getSubArea());
+        categoryTextView.setText(propertyList.getCategory());
+        flatTypeTextView.setText(propertyList.getFlatType());
+        beds.setText(propertyList.getBeds());
+        baths.setText(propertyList.getBaths());
+        priceTextView.setText(propertyList.getPrice());
+        addedDateTextView.setText(propertyList.getAddedDate());
+        availableMonthTextView.setText(propertyList.getAvailableMonth());
+        descriptionTextView.setText(propertyList.getDescription());
+        conTextView.setText(propertyList.getUserPhone());
+        nameTextView.setText(propertyList.getPropertyOwner());
 
 
         backButton.setOnClickListener(new View.OnClickListener() {

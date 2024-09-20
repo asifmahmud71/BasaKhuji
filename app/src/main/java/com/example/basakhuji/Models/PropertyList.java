@@ -6,7 +6,8 @@ import java.io.Serializable;
 import java.util.List;
 
 public class PropertyList implements Serializable {
-    private String category, flatType, division, district, area, subArea, price, description, addedDate, availableMonth, id, beds, baths, userPhone;
+    private String category, flatType, division, district, area, subArea, price, description,
+            addedDate, availableMonth, id, beds, baths, userPhone, propertyOwner;
     private List<String> likedBy;
     private List<String> dislikedBy;
     private List<String> imageUrl;
@@ -141,6 +142,14 @@ public class PropertyList implements Serializable {
 
     public String getUserPhone() {
         return userPhone;
+    }
+
+    public void setPropertyOwner(String propertyOwner)
+    {
+        this.propertyOwner = propertyOwner;
+    }
+    public String getPropertyOwner(){
+        return propertyOwner;
     }
 
 }

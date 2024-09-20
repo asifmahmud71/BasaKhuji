@@ -1,9 +1,10 @@
 <!-- activity_property_details.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
+    android:background="#F3EFEF"
     android:orientation="vertical">
 
     <!-- Toolbar -->
@@ -42,8 +43,7 @@
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    xmlns:tools="http://schemas.android.com/tools">
+    >
 
 <RelativeLayout
     android:layout_width="match_parent"
@@ -51,126 +51,403 @@
 
     <!-- Display property details -->
     <com.denzcoskun.imageslider.ImageSlider
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
         android:id="@+id/imageSlider"
+        android:layout_width="match_parent"
+        android:layout_height="202dp"
         app:iss_auto_cycle="false"
-        app:iss_period="1000"
-        app:iss_delay="1000"
         app:iss_corner_radius="10"
-        />
-
-<!--    <ImageView-->
-<!--        android:id="@+id/propertyImageView"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="200dp"-->
-<!--        android:scaleType="centerCrop" />-->
+        android:layout_margin="0dp"
+        app:iss_delay="1000"
+        app:iss_period="1000" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/priceLabel"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageSlider"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Price Information"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/priceLinear"
+        android:layout_below="@+id/priceLabel"
+        android:orientation="vertical"
+        android:padding="10dp"
+        >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearPrice"
+        android:orientation="horizontal"
+        android:background="#D0D8DC"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Price"
+            android:textSize="16dp"
+            android:padding="8dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/priceTextView"
+            android:textSize="16dp"
+            android:padding="8dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#FFFFFF"
+            android:weightSum="2"
+            android:id="@+id/priceFor"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Price for"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Monthly"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
         android:id="@+id/locationLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/priceLinear"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:text="Location Information"
+        android:textColor="@color/black"
         android:textSize="20dp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/divisionTextView"
+        android:id="@+id/locationLinear"
         android:layout_below="@+id/locationLabel"
-        android:textSize="16dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/districtTextView"
-        android:layout_below="@+id/divisionTextView"
-        android:textSize="16dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/areaTextView"
-        android:layout_below="@+id/districtTextView"
-        android:textSize="16dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/subAreaTextView"
-        android:layout_below="@+id/areaTextView"
-        android:textSize="16dp"
-        />
+        android:orientation="vertical"
+        android:padding="10dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearDivision"
+            android:orientation="horizontal"
+            android:background="#D0D8DC"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Division"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/divisionTextView"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/linearDistrict"
+            android:background="#FFFFFF"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="District"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/districtTextView"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/linearArea"
+            android:background="#D0D8DC"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Area"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/areaTextView"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/linearSubArea"
+            android:background="#FFFFFF"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Sub Area"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/subAreaTextView"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/basicLabel"
-        android:layout_below="@+id/subAreaTextView"
-        android:text="Details Information"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/locationLinear"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="Basic Information"
+        android:textColor="@color/black"
         android:textSize="20dp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/categoryTextView"
+        android:id="@+id/basicLinear"
         android:layout_below="@+id/basicLabel"
-        android:textSize="16dp"
-        />
+        android:orientation="vertical"
+        android:padding="10dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/linearCategory"
+            android:background="#D0D8DC"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Category"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/categoryTextView"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/linearType"
+            android:background="#FFFFFF"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Type"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/flatTypeTextView"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/linearBed"
+            android:background="#D0D8DC"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Beds"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/bedsTextView"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/linearBath"
+            android:background="#FFFFFF"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Baths"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/bathsTextView"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/linearAddedDate"
+            android:background="#D0D8DC"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Added at"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/addedDateTextView"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/linearAvailable"
+            android:background="#FFFFFF"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Available from"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/availableMonthTextView"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <TextView
+        android:id="@+id/detailsLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/flatTypeTextView"
-        android:layout_below="@+id/categoryTextView"
-        android:textSize="16dp"/>
+        android:layout_below="@+id/basicLinear"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="Details"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/bedsTextView"
-        android:layout_below="@+id/flatTypeTextView"
-        android:textSize="16dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/bathsTextView"
-        android:layout_below="@+id/bedsTextView"
-        android:textSize="16dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/priceTextView"
-        android:layout_below="@+id/bathsTextView"
-        android:textSize="16dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/addedDateTextView"
-        android:layout_below="@+id/priceTextView"
-        android:textSize="16dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/availableMonthTextView"
-        android:layout_below="@+id/addedDateTextView"
-        android:textSize="16dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
         android:id="@+id/descriptionTextView"
-        android:layout_below="@+id/availableMonthTextView"
-        android:textSize="16dp"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@+id/detailsLabel"
+        android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/white"
+        android:padding="8dp"
+        android:textSize="16dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -178,19 +455,70 @@
         android:id="@+id/conLabel"
         android:layout_below="@+id/descriptionTextView"
         android:text="Contact Information"
+        android:textColor="@color/black"
         android:textSize="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:textStyle="bold"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/conTextView"
+        android:id="@+id/conLinear"
         android:layout_below="@+id/conLabel"
-        android:textSize="16dp"
-        android:backgroundTint="#ACA7A7"
-        android:visibility="invisible"
-        />
+        android:orientation="vertical"
+        android:padding="10dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearName"
+            android:orientation="horizontal"
+            android:background="#D0D8DC"
+            android:weightSum="2">
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Property Owner"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/nameTextView"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#FFFFFF"
+            android:weightSum="2"
+            android:id="@+id/pNumber"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Phone number"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/conTextView"
+                android:textSize="16dp"
+                android:padding="8dp"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
     <!-- Like and Dislike -->
@@ -199,7 +527,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/conTextView"
+        android:layout_below="@+id/conLinear"
         android:layout_marginTop="20dp"
         android:layout_marginStart="10dp"
         android:gravity="center_vertical">

@@ -211,6 +211,7 @@ public class AddPropertyActivity extends AppCompatActivity {
             userRef.get().addOnSuccessListener(documentSnapshot -> {
                 if (documentSnapshot.exists()) {
                     String phoneNumber = documentSnapshot.getString("phoneNumber");
+                    String propertyOwner = documentSnapshot.getString("fullName");
 
                     // Create property object
                     Map<String, Object> property = new HashMap<>();
@@ -228,6 +229,7 @@ public class AddPropertyActivity extends AppCompatActivity {
                     property.put("description", descriptionEditText.getText().toString().trim());
                     property.put("imageUrl", imageUrls); // Store the list of image URLs
                     property.put("userPhone", phoneNumber);
+                    property.put("propertyOwner", propertyOwner);
                     property.put("likedBy", new ArrayList<>());
                     property.put("dislikedBy", new ArrayList<>());
 
