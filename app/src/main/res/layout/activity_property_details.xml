@@ -1,8 +1,8 @@
 <!-- activity_property_details.xml -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_back"
             android:layout_gravity="start"
-            android:padding="8dp"
+            android:padding="2dp"
             android:contentDescription="Back" />
 
         <TextView
@@ -50,16 +50,26 @@
     android:layout_height="match_parent">
 
     <!-- Display property details -->
-    <ImageView
-        android:id="@+id/propertyImageView"
+    <com.denzcoskun.imageslider.ImageSlider
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:scaleType="centerCrop" />
+        android:id="@+id/imageSlider"
+        app:iss_auto_cycle="false"
+        app:iss_period="1000"
+        app:iss_delay="1000"
+        app:iss_corner_radius="10"
+        />
+
+<!--    <ImageView-->
+<!--        android:id="@+id/propertyImageView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="200dp"-->
+<!--        android:scaleType="centerCrop" />-->
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/propertyImageView"
+        android:layout_below="@+id/imageSlider"
         android:layout_marginTop="20dp"
         android:id="@+id/locationLabel"
         android:text="Location Information"

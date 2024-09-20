@@ -22,10 +22,15 @@ import java.util.List;
 public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.PropertyViewHolder> {
 
     private final Context context;
-    private final List<PropertyList> propertyList;
+    private List<PropertyList> propertyList;
     public PropertyAdapter(Context context, ArrayList<PropertyList> propertyList) {
         this.context = context;
         this.propertyList = propertyList;
+    }
+
+    public void setFilteredList(List<PropertyList> filteredList){
+        this.propertyList = filteredList;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -73,15 +78,17 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
             String location = property.getArea() + ", " + property.getDistrict();
             locationTextView.setText(location);
 
-
             // Load property image using Glide
-            Glide.with(itemView.getContext())
-                    .load(property.getImageUrl())
-                    .placeholder(R.drawable.placeholder_image)
-                    .error(R.drawable.error_image)
-                    .into(propertyImageView);
+            List<String> imageUrlList = property.getImageUrl();
+            if (imageUrlList != null && !imageUrlList.isEmpty()) {
+                String firstImageUrl = imageUrlList.get(0);
+                Glide.with(itemView.getContext())
+                        .load(firstImageUrl)
+                        .placeholder(R.drawable.placeholder_image)
+                        .error(R.drawable.error_image)
+                        .into(propertyImageView);
 
+            }
         }
-
     }
 }

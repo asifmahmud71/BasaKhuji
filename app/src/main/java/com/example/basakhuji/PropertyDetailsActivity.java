@@ -1,7 +1,6 @@
 package com.example.basakhuji;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,7 +10,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.basakhuji.Models.PropertyList;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -20,6 +21,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +36,7 @@ public class PropertyDetailsActivity extends AppCompatActivity {
     ImageView likeButton, dislikeButton;
     private ListenerRegistration likeListener;
     private ListenerRegistration dislikeListener;
-
+    private ImageSlider imageSlider;
 
     public PropertyDetailsActivity() {
         this.firestore = FirebaseFirestore.getInstance();
@@ -67,7 +69,7 @@ public class PropertyDetailsActivity extends AppCompatActivity {
         TextView addedDateTextView = findViewById(R.id.addedDateTextView);
         TextView availableMonthTextView = findViewById(R.id.availableMonthTextView);
         TextView descriptionTextView = findViewById(R.id.descriptionTextView);
-        ImageView propertyImageView = findViewById(R.id.propertyImageView);
+        imageSlider = findViewById(R.id.imageSlider);
         TextView beds = findViewById(R.id.bedsTextView);
         TextView baths = findViewById(R.id.bathsTextView);
         TextView conTextView = findViewById(R.id.conTextView);
@@ -107,10 +109,15 @@ public class PropertyDetailsActivity extends AppCompatActivity {
             }
         });
 
-        // Load property image using Glide
-        Glide.with(this)
-                .load(propertyList.getImageUrl())
-                .into(propertyImageView);
+
+        // Load property images into the ImageSlider
+        ArrayList<SlideModel> slideModels = new ArrayList<>();
+        for (String url : propertyList.getImageUrl()) {
+            slideModels.add(new SlideModel(url, ScaleTypes.FIT));
+            imageSlider.setImageList(slideModels, ScaleTypes.FIT);
+        }
+
+
 
         // Handle like button click
         likeButton.setOnClickListener(v -> {

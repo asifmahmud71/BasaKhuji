@@ -12,29 +12,27 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
@@ -48,11 +46,12 @@ public class AddPropertyActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private Calendar calendar;
 
-    private static final int PICK_IMAGES_REQUEST = 1;
-
-    private ImageView imagePreview;
     StorageReference storageReference;
     Uri imageUri;
+    private LinearLayout imagePreview;
+    private ArrayList<Uri> imageUris = new ArrayList<>();
+    private static final int PICK_IMAGES_REQUEST = 1;
+    private static final int MAX_IMAGES = 4;
 
 
 
@@ -80,6 +79,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         priceEditText = findViewById(R.id.priceEditText);
         categorySpinner = findViewById(R.id.categorySpinner);
         flatTypeSpinner = findViewById(R.id.flatTypeSpinner);
+        //imagePreview = findViewById(R.id.imagePreview);
         imagePreview = findViewById(R.id.imagePreview);
 
 
@@ -132,19 +132,26 @@ public class AddPropertyActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (imageUri != null) {
-                    saveImageStorage(imageUri);
-                } else {
-                    Toast.makeText(AddPropertyActivity.this, "Please select an image", Toast.LENGTH_SHORT).show();
+                if (validateInputFields()) {
+                    if (!imageUris.isEmpty()) {
+                        uploadImagesAndSaveDetails();
+                    } else {
+                        Toast.makeText(AddPropertyActivity.this, "Please select images", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
+
 
         Button imageUploadButton = findViewById(R.id.imageUploadButton);
         imageUploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openImagePicker();
+                if (imageUris.size() < 5) {
+                    openImagePicker();
+                } else {
+                    Toast.makeText(AddPropertyActivity.this, "You can select up to 5 images", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -157,8 +164,43 @@ public class AddPropertyActivity extends AppCompatActivity {
 
     }
 
+    private boolean validateInputFields() {
+        if (divisionEditText.getText().toString().trim().isEmpty() ||
+                districtEditText.getText().toString().trim().isEmpty() ||
+                areaEditText.getText().toString().trim().isEmpty() ||
+                subAreaEditText.getText().toString().trim().isEmpty() ||
+                bedsEditText.getText().toString().trim().isEmpty() ||
+                bathsEditText.getText().toString().trim().isEmpty() ||
+                addedDateTextView.getText().toString().trim().isEmpty() ||
+                priceEditText.getText().toString().trim().isEmpty() ||
+                descriptionEditText.getText().toString().trim().isEmpty() ||
+                categorySpinner.getSelectedItem().toString().equals("Select Category") ||
+                flatTypeSpinner.getSelectedItem().toString().equals("Select Flat Type") ||
+                availableMonthSpinner.getSelectedItem().toString().equals("Select Month")) {
+            Toast.makeText(AddPropertyActivity.this, "Please fill in all property details", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
 
-    private void savePropertyDetails(String imageUrl) {
+
+    private void uploadImagesAndSaveDetails() {
+        final List<String> imageUrls = new ArrayList<>();
+        for (Uri uri : imageUris) {
+            StorageReference reference = storageReference.child("images/" + UUID.randomUUID().toString());
+            reference.putFile(uri).addOnSuccessListener(taskSnapshot -> {
+                reference.getDownloadUrl().addOnSuccessListener(downloadUri -> {
+                    imageUrls.add(downloadUri.toString());
+                    if (imageUrls.size() == imageUris.size()) {
+                        savePropertyDetails(imageUrls);
+                    }
+                }).addOnFailureListener(e -> Toast.makeText(AddPropertyActivity.this, "Failed to get image URL", Toast.LENGTH_SHORT).show());
+            }).addOnFailureListener(e -> Toast.makeText(AddPropertyActivity.this, "Image uploading failed!", Toast.LENGTH_SHORT).show());
+        }
+    }
+
+
+    private void savePropertyDetails(List<String> imageUrls) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser != null) {
@@ -184,7 +226,7 @@ public class AddPropertyActivity extends AppCompatActivity {
                     property.put("availableMonth", availableMonthSpinner.getSelectedItem().toString());
                     property.put("price", priceEditText.getText().toString().trim() + " BDT");
                     property.put("description", descriptionEditText.getText().toString().trim());
-                    property.put("imageUrl", imageUrl);
+                    property.put("imageUrl", imageUrls); // Store the list of image URLs
                     property.put("userPhone", phoneNumber);
                     property.put("likedBy", new ArrayList<>());
                     property.put("dislikedBy", new ArrayList<>());
@@ -196,44 +238,20 @@ public class AddPropertyActivity extends AppCompatActivity {
                                 Toast.makeText(AddPropertyActivity.this, "Property details added successfully", Toast.LENGTH_SHORT).show();
                                 finish();
                             })
-                            .addOnFailureListener(e -> Toast.makeText(AddPropertyActivity.this, "Error adding property details: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-                } else {
-                    Toast.makeText(AddPropertyActivity.this, "User document does not exist", Toast.LENGTH_SHORT).show();
+                            .addOnFailureListener(e -> Toast.makeText(AddPropertyActivity.this, "Failed to add property details", Toast.LENGTH_SHORT).show());
                 }
-            }).addOnFailureListener(e -> Toast.makeText(AddPropertyActivity.this, "Failed to fetch user document: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-        } else {
-            Toast.makeText(AddPropertyActivity.this, "No authenticated user found", Toast.LENGTH_SHORT).show();
+            }).addOnFailureListener(e -> Toast.makeText(AddPropertyActivity.this, "Failed to get user phone number", Toast.LENGTH_SHORT).show());
         }
     }
 
 
+
     // Method to open image picker
     private void openImagePicker() {
-        Intent intent = new Intent();
+        Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Images"), PICK_IMAGES_REQUEST);
-    }
-
-    private void showDatePickerDialog() {
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                calendar.set(Calendar.YEAR, year);
-                calendar.set(Calendar.MONTH, monthOfYear);
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateButton();
-            }
-        };
-
-        new DatePickerDialog(
-                this,
-                dateSetListener,
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-        ).show();
+        startActivityForResult(Intent.createChooser(intent, "Select Pictures"), PICK_IMAGES_REQUEST);
     }
 
     private void updateButton() {
@@ -246,41 +264,53 @@ public class AddPropertyActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGES_REQUEST && data != null ) {
 
-                imageUri = data.getData();
-                imagePreview.setImageURI(imageUri);
-
+        if (requestCode == PICK_IMAGES_REQUEST && resultCode == RESULT_OK) {
+            if (data != null) {
+                if (data.getClipData() != null) {
+                    int count = data.getClipData().getItemCount();
+                    for (int i = 0; i < count; i++) {
+                        Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                        if (imageUris.size() < 5) {
+                            imageUris.add(imageUri);
+                        }
+                    }
+                } else if (data.getData() != null) {
+                    Uri imageUri = data.getData();
+                    if (imageUris.size() < 5) {
+                        imageUris.add(imageUri);
+                    }
+                }
+                displaySelectedImages();
+            }
         }
     }
 
-    // Method to save image to storage
-    private void saveImageStorage(Uri imageUri){
-        StorageReference reference = storageReference.child("images/" + UUID.randomUUID().toString());
-        reference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+    private void displaySelectedImages() {
+        imagePreview.removeAllViews();
+        for (Uri uri : imageUris) {
+            ImageView imageView = new ImageView(this);
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(
+                    200, 200));
+            imageView.setImageURI(uri);
+            imagePreview.addView(imageView);
+        }
+    }
+    private void showDatePickerDialog() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(AddPropertyActivity.this, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // Get the download URL of the uploaded image
-                reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        savePropertyDetails(uri.toString());
-                        Toast.makeText(AddPropertyActivity.this, "Image uploaded", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(AddPropertyActivity.this, "Failed to get image URL", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateAddedDateTextView();
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(AddPropertyActivity.this, "Image uploading failed!", Toast.LENGTH_SHORT).show();
-            }
-        });
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
     }
 
-
+    private void updateAddedDateTextView() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+        addedDateTextView.setText(dateFormat.format(calendar.getTime()));
+    }
 }

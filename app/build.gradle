@@ -69,7 +69,7 @@ dependencies {
     implementation 'com.apollographql.apollo:apollo-runtime:2.5.9'
     implementation 'com.apollographql.apollo:apollo-rx2-support:2.5.9'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation "io.reactivex.rxjava2:rxjava:2.2.6"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.20"
 
     // RxJava2 support
     implementation 'com.apollographql.apollo:apollo-rx2-support:2.5.9'
@@ -90,7 +90,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation platform("com.google.firebase:firebase-bom:32.7.2")
     implementation 'com.google.firebase:firebase-auth:23.0.0'
-    implementation 'com.google.firebase:firebase-firestore:25.0.0'
+    implementation 'com.google.firebase:firebase-firestore:25.1.0'
     implementation 'com.google.firebase:firebase-storage:21.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
@@ -99,5 +99,7 @@ dependencies {
     implementation 'org.tensorflow:tensorflow-lite-task-text:0.4.0'
     implementation 'org.tensorflow:tensorflow-lite-gpu-delegate-plugin:0.4.0'
     implementation 'org.tensorflow:tensorflow-lite-gpu:2.9.0'
+
+    implementation 'com.github.denzcoskun:ImageSlideshow:0.1.2'
 
 }

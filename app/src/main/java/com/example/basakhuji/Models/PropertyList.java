@@ -6,24 +6,16 @@ import java.io.Serializable;
 import java.util.List;
 
 public class PropertyList implements Serializable {
-    private String imageUrl, category, flatType, division, district, area, subArea, price, description, addedDate, availableMonth, id, beds, baths, userPhone;
+    private String category, flatType, division, district, area, subArea, price, description, addedDate, availableMonth, id, beds, baths, userPhone;
     private List<String> likedBy;
     private List<String> dislikedBy;
-
+    private List<String> imageUrl;
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 
     public String getCategory() {
@@ -123,6 +115,12 @@ public class PropertyList implements Serializable {
     }
 
 
+    public List<String> getImageUrl() {
+        return imageUrl;
+    }
+    public void setImageUrl(List<String> imageUrl) {
+        this.imageUrl = imageUrl;
+    }
     public List<String> getLikedBy() {
         return likedBy;
     }

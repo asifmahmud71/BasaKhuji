@@ -121,7 +121,6 @@ public class ProfileActivity extends AppCompatActivity{
 
         ImageView backButton = findViewById(R.id.backButton);
 
-        map_btn = findViewById(R.id.map_btn);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,13 +128,6 @@ public class ProfileActivity extends AppCompatActivity{
                 onBackPressed();
             }
         });
-        map_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ProfileActivity.this, MapsActivity.class));
-            }
-        });
-
 
         // Initialize Firebase components
         mAuth = FirebaseAuth.getInstance();
