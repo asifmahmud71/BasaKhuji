@@ -5,6 +5,7 @@ query Countries {
         capital
         emoji
         currency
+        phone
         languages {
             name
         }

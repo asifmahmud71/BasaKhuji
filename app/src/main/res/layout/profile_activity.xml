@@ -1,216 +1,133 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white">
 
     <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="57dp"
         android:background="#00897B"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <!-- Back button -->
         <ImageView
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_back"
             android:layout_gravity="start"
+            android:contentDescription="Back"
             android:padding="8dp"
-            android:contentDescription="Back" />
+            android:src="@drawable/ic_back" />
 
         <TextView
-        android:id="@+id/profileDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_gravity=""
-        android:text="Profile Details"
-        android:textColor="@color/white"
-        android:textSize="22sp"
-        android:textStyle="bold" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/logoutButton"
-            android:layout_width="103dp"
+            android:id="@+id/profileDetails"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Log out"
-            android:background="@drawable/button_background"
+            android:layout_gravity="center"
+            android:text="Edit Profile"
             android:textColor="@color/white"
-            android:layout_gravity="end"
-            android:layout_marginEnd="12dp"
-            android:textSize="16sp" />
-
+            android:textSize="22sp"
+            android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
-<ScrollView
-
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:padding="16dp"
-    tools:ignore="WebViewLayout">
-
-    <TextView
-        android:id="@+id/fullNameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Full Name:"
-        android:textSize="18sp"
-        android:textColor="@color/black"
-        android:layout_marginTop="20dp"/>
-
-    <EditText
-        android:id="@+id/fullNameEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/fullNameTextView"
-        android:layout_marginTop="10dp"
-        android:hint="Enter Full Name"
-        android:inputType="text"
-        android:textColor="@color/black"/>
-
-    <TextView
-        android:id="@+id/usernameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Username:"
-        android:textSize="18sp"
-        android:textColor="@color/black"
-        android:layout_below="@id/fullNameEditText"
-        android:layout_marginTop="20dp"/>
-
-    <EditText
-        android:id="@+id/usernameEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/usernameTextView"
-        android:layout_marginTop="10dp"
-        android:hint="Enter Username"
-        android:inputType="text"
-        android:textColor="@color/black"/>
-
-    <TextView
-        android:id="@+id/emailTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Email:"
-        android:textSize="18sp"
-        android:textColor="@color/black"
-        android:layout_below="@id/usernameEditText"
-        android:layout_marginTop="20dp"/>
-
-    <EditText
-        android:id="@+id/emailEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/emailTextView"
-        android:layout_marginTop="10dp"
-        android:hint="Enter Email"
-        android:inputType="textEmailAddress"
-        android:textColor="@color/black"/>
-
-    <TextView
-        android:id="@+id/phoneNumberTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Phone Number:"
-        android:textSize="18sp"
-        android:textColor="@color/black"
-        android:layout_below="@id/emailEditText"
-        android:layout_marginTop="20dp"/>
-
-    <EditText
-        android:id="@+id/phoneNumberEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/phoneNumberTextView"
-        android:layout_marginTop="10dp"
-        android:hint="Enter Phone Number"
-        android:inputType="phone"
-        android:textColor="@color/black"/>
-
-    <Button
-        android:id="@+id/updateButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/phoneNumberEditText"
-        android:layout_marginTop="20dp"
-        android:text="Update"
-        android:textColor="@color/white"
-        android:textSize="18sp"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/wid"
-        android:layout_below="@+id/updateButton"
-        android:layout_marginTop="10dp"
-        android:textSize="18sp"
-        android:textColor="#1E88E5"
-        android:text="Today's Weather Information:"
-        />
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:id="@+id/weather"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_below="@+id/wid">
+        android:padding="16dp">
 
         <TextView
+            android:id="@+id/fullNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/temperatureTextView"
-            android:text="Temperature: "
-            android:textStyle="bold"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginTop="20dp"
+            android:text="Full Name:"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/fullNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fullNameTextView"
+            android:layout_marginTop="10dp"
+            android:hint="Enter Full Name"
+            android:inputType="text"
+            android:textColor="@color/black" />
 
         <TextView
+            android:id="@+id/usernameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/humidityTextView"
-            android:text="Humidity: "
-            android:textStyle="bold"
-            android:layout_marginEnd="8dp"/>
+            android:layout_below="@id/fullNameEditText"
+            android:layout_marginTop="20dp"
+            android:text="Username:"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/usernameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/usernameTextView"
+            android:layout_marginTop="10dp"
+            android:hint="Enter Username"
+            android:inputType="text"
+            android:textColor="@color/black" />
 
         <TextView
+            android:id="@+id/emailTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/weatherConditionTextView"
-            android:text="Weather Condition: "
-            android:textStyle="bold"/>
+            android:layout_below="@id/usernameEditText"
+            android:layout_marginTop="20dp"
+            android:text="Email:"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
 
+        <EditText
+            android:id="@+id/emailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/emailTextView"
+            android:layout_marginTop="10dp"
+            android:hint="Enter Email"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/phoneNumberTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/emailEditText"
+            android:layout_marginTop="20dp"
+            android:text="Phone Number:"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/phoneNumberEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/phoneNumberTextView"
+            android:layout_marginTop="10dp"
+            android:hint="Enter Phone Number"
+            android:inputType="phone"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/updateButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/phoneNumberEditText"
+            android:layout_marginTop="20dp"
+            android:text="Update"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_below="@+id/weather"
-        android:layout_marginTop="24dp"
-        android:textSize="16sp"
-        android:textStyle="bold|italic"
-        android:text="An overview of proeprty rental system!" />
-
-    <WebView
-        android:id="@+id/webView"
-        android:layout_width="400dp"
-        android:layout_height="201dp"
-        android:layout_below="@+id/button"
-        android:layout_marginTop="2dp" />
-
-</RelativeLayout>
-</ScrollView>
 </LinearLayout>

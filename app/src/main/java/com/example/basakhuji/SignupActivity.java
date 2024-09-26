@@ -3,10 +3,10 @@ package com.example.basakhuji;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,7 +43,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private EditText fullNameEditText, signUpEmailEditText, phonenumberEditText, signUpPasswordEditText, unameEditText;
     private Button signUpButton;
-    private TextView loginTextView;
+    private TextView loginTextView, countryCodeTextView;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -72,7 +72,7 @@ public class SignupActivity extends AppCompatActivity {
         loginTextView = findViewById(R.id.loginTextView);
 
         countrySpinner = findViewById(R.id.countrySpinner);
-
+        countryCodeTextView = findViewById(R.id.countryCodeTextView);
 
         signUpEmailEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -194,16 +194,33 @@ public class SignupActivity extends AppCompatActivity {
                     public void accept(Response<CountriesQuery.Data> response) throws Exception {
                         if (response.data() != null) {
                             List<String> countryNames = new ArrayList<>();
+                            final List<String> countryCodes = new ArrayList<>(); // Store country codes
                             for (CountriesQuery.Country country : response.data().countries()) {
                                 countryNames.add(country.name());
+                                countryCodes.add("+" + country.phone());
                             }
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(SignupActivity.this, android.R.layout.simple_spinner_item, countryNames);
                             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             countrySpinner.setAdapter(adapter);
+
+                            // Set onItemSelectedListener to update the country code TextView
+                            countrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                    String selectedCountryCode = countryCodes.get(position);
+                                    countryCodeTextView.setText(selectedCountryCode);
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {
+                                    countryCodeTextView.setText("");
+                                }
+                            });
                         }
                     }
                 });
     }
+
 
 
     private boolean isValidEmail(String email) {

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    tools:context=".AboutUsActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="411dp"
+        android:layout_height="57dp"
+        android:background="#00897B"
+        android:elevation="4dp"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            android:layout_gravity="start"
+            android:padding="2dp"
+            android:contentDescription="Back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="About US"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_gravity="center" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        >
+
+        <!-- Marquee Text for Weather Info -->
+        <TextView
+            android:id="@+id/weatherMarqueeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Weather Information: Loading..."
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:background="#DFDBDB"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:scrollHorizontally="true" />
+
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="330dp"
+        android:layout_marginTop="20dp"
+        android:text="BasaKhuji is a platform that helps you find rental properties easily. We aim to provide the best service for both property owners and tenants. Our mission is to make the rental process as smooth as possible."
+        android:textSize="16sp"
+        android:lineSpacingExtra="4dp"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="24dp"
+        android:textSize="16sp"
+        android:textStyle="bold|italic"
+        android:text="An overview of proeprty rental system!" />
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="400dp"
+        android:layout_height="201dp"
+        android:layout_below="@+id/button"
+        android:layout_marginTop="2dp" />
+
+    <TextView
+        android:id="@+id/contact_us_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contact Us"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="24dp"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/contact_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Email: info@basakhuji.com\nPhone: +880 1234 567890"
+        android:textSize="16sp"
+        android:lineSpacingExtra="4dp"
+        android:textColor="#000000" />
+
+    </LinearLayout>
+
+</LinearLayout>
