@@ -46,6 +46,7 @@
         <activity android:name=".AddPropertyActivity" />
         <activity android:name=".PropertyDetailsActivity" />
         <activity android:name=".AboutUsActivity" />
+        <activity android:name=".ChartActivity"  />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

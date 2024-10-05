@@ -155,12 +155,10 @@ public class RatingActivity extends AppCompatActivity {
                         float negativeScore = results.isEmpty() ? 0 : results.get(0);
                         float positiveScore = results.size() > 1 ? results.get(1) : 0;
 
-                        if(positiveScore > negativeScore)
-                        {
+                        if (positiveScore > negativeScore) {
                             data.put("score", positiveScore);
                             data.put("sentiment", "positive");
-                        }
-                        else {
+                        } else {
                             data.put("score", negativeScore);
                             data.put("sentiment", "negative");
                         }
@@ -294,7 +292,6 @@ public class RatingActivity extends AppCompatActivity {
             pageLayout.addView(textView);
         }
     }
-
 
 
 }

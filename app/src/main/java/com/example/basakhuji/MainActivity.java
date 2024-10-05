@@ -242,6 +242,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if (id == R.id.nav_edit_profile) {
             startActivity(new Intent(MainActivity.this, ProfileActivity.class));
         }
+        else if (id == R.id.crystal_report) {
+            startActivity(new Intent(MainActivity.this, ChartActivity.class));
+        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

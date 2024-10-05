@@ -1,0 +1,35 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <Spinner
+        android:id="@+id/yearSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp" />
+
+    <Spinner
+        android:layout_below="@+id/yearSpinner"
+        android:id="@+id/monthSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:layout_below="@+id/monthSpinner"
+        android:id="@+id/filterButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Chart" />
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:layout_below="@+id/filterButton"
+        android:id="@+id/lineChart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp" />
+
+</RelativeLayout>
