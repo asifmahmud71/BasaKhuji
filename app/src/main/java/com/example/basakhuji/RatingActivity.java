@@ -218,27 +218,20 @@ public class RatingActivity extends AppCompatActivity {
                             // Inflate the rating view layout
                             View ratingView = LayoutInflater.from(RatingActivity.this).inflate(R.layout.item_rating, null);
 
-                            // Find views inside the rating view layout
                             TextView userEmailTextView = ratingView.findViewById(R.id.userEmailTextView);
                             RatingBar ratingBar = ratingView.findViewById(R.id.ratingBar);
                             TextView commentTextView = ratingView.findViewById(R.id.commentTextView);
                             TextView scoreTextView = ratingView.findViewById(R.id.scoreTextView);
 
-                            // Set user email and rating
                             userEmailTextView.setText(userEmail);
                             ratingBar.setRating(rating);
 
-                            // Compare positive and negative scores to determine sentiment
                             if ("positive".equals(sentiment)) {
-                                // Positive sentiment
-                                // Update TextView background color based on positivity
-                                commentTextView.setBackgroundColor(Color.GREEN);
-                                scoreTextView.setText(String.format("%.2f", score));
+                                commentTextView.setTextColor(Color.GREEN);
+                                scoreTextView.setText(String.format("Positive score: %.2f", score));
                             } else {
-                                // Negative sentiment
-                                // Update TextView background color based on negativity
-                                commentTextView.setBackgroundColor(Color.RED);
-                                scoreTextView.setText(String.format("%.2f", score));
+                                commentTextView.setTextColor(Color.RED);
+                                scoreTextView.setText(String.format("Negative score: %.2f", score));
                             }
 
                             commentTextView.setText(comment);

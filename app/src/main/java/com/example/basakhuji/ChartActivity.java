@@ -3,8 +3,10 @@ package com.example.basakhuji;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -34,6 +36,7 @@ public class ChartActivity extends AppCompatActivity {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
 
     private Spinner monthSpinner, yearSpinner;
+    ImageView backButton;
     private Button filterButton;
 
     @Override
@@ -51,6 +54,14 @@ public class ChartActivity extends AppCompatActivity {
         monthSpinner = findViewById(R.id.monthSpinner);
         yearSpinner = findViewById(R.id.yearSpinner);
         filterButton = findViewById(R.id.filterButton);
+        backButton = findViewById(R.id.backButton);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         // Set up the spinners with data
         setupMonthSpinner();
