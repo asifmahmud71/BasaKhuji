@@ -1,9 +1,12 @@
 package com.example.basakhuji;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,16 +48,12 @@ public class LoginActivity extends AppCompatActivity {
         // getting the data which is stored in shared preferences.
         sharedpreferences = this.getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
 
-
-
-
-
         mAuth = FirebaseAuth.getInstance();
 
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         Button loginButton = findViewById(R.id.loginButton);
-
+        TextView forgotPasswordTextView = findViewById(R.id.forgotPasswordTextView); // Forgot password text
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,9 +63,18 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (email.isEmpty() && password.isEmpty()) {
                     Toast.makeText(LoginActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     loginUser(email, password);
                 }
+            }
+        });
+
+        // Forgot Password logic
+        forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Show dialog to enter email for password reset
+                showForgotPasswordDialog();
             }
         });
 
@@ -113,6 +121,54 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    private void showForgotPasswordDialog() {
+        // Create an AlertDialog to get the email
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Reset Password");
+
+        // Create an input field
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        input.setHint("Enter your email");
+
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("Send Reset Link", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String email = input.getText().toString().trim();
+                if (!email.isEmpty()) {
+                    sendPasswordResetEmail(email);
+                } else {
+                    Toast.makeText(LoginActivity.this, "Please enter your email.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void sendPasswordResetEmail(String email) {
+        mAuth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Password reset email sent.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Failed to send reset email.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
 
     @Override
     protected void onStart() {
@@ -122,5 +178,4 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(i);
         }
     }
-
 }

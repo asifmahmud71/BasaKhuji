@@ -8,9 +8,9 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +38,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-
 public class SignupActivity extends AppCompatActivity {
 
     private EditText fullNameEditText, signUpEmailEditText, phonenumberEditText, signUpPasswordEditText, unameEditText;
@@ -48,7 +47,7 @@ public class SignupActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
-    private Spinner countrySpinner;
+    private AutoCompleteTextView countryDropdown;
     private ApolloClient apolloClient;
 
     @Override
@@ -71,13 +70,13 @@ public class SignupActivity extends AppCompatActivity {
         fullNameEditText = findViewById(R.id.nameEditText);
         loginTextView = findViewById(R.id.loginTextView);
 
-        countrySpinner = findViewById(R.id.countrySpinner);
+        countryDropdown = findViewById(R.id.countryAutoCompleteTextView);
         countryCodeTextView = findViewById(R.id.countryCodeTextView);
 
+        // Set up email validation
         signUpEmailEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -91,14 +90,13 @@ public class SignupActivity extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-            }
+            public void afterTextChanged(Editable s) { }
         });
 
+        // Set up phone number validation
         phonenumberEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -112,15 +110,13 @@ public class SignupActivity extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-            }
+            public void afterTextChanged(Editable s) { }
         });
 
-
+        // Check if username is available
         unameEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -128,21 +124,20 @@ public class SignupActivity extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-            }
+            public void afterTextChanged(Editable s) { }
         });
 
+        // Sign up button click listener
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String fullName = fullNameEditText.getText().toString().trim();
                 String username = unameEditText.getText().toString().trim();
                 String email = signUpEmailEditText.getText().toString().trim();
-                //String phoneNumber = phonenumberEditText.getText().toString().trim();
                 String password = signUpPasswordEditText.getText().toString().trim();
                 String phoneNumber = phonenumberEditText.getText().toString().trim();
+
                 if (!isValidPhoneNumber(phoneNumber)) {
-                    // If phone number is not valid, show error message
                     phonenumberEditText.setError("Invalid phone number");
                     return;
                 }
@@ -152,18 +147,15 @@ public class SignupActivity extends AppCompatActivity {
                     return;
                 }
 
-
                 // Create user with email and password
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     sendEmailVerification(user);
                                 } else {
-
                                     Toast.makeText(SignupActivity.this, "Failed to register user: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -171,18 +163,18 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
+        // Login button click listener
         loginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 startActivity(new Intent(SignupActivity.this, LoginActivity.class));
                 finish();
             }
         });
 
+        // Fetch country data from GraphQL
         fetchCountries();
     }
-
 
     private void fetchCountries() {
         CountriesQuery countriesQuery = CountriesQuery.builder().build();
@@ -199,21 +191,15 @@ public class SignupActivity extends AppCompatActivity {
                                 countryNames.add(country.name());
                                 countryCodes.add("+" + country.phone());
                             }
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(SignupActivity.this, android.R.layout.simple_spinner_item, countryNames);
-                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            countrySpinner.setAdapter(adapter);
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(SignupActivity.this, android.R.layout.simple_dropdown_item_1line, countryNames);
+                            countryDropdown.setAdapter(adapter);
 
-                            // Set onItemSelectedListener to update the country code TextView
-                            countrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            // Handle item selection from dropdown
+                            countryDropdown.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
-                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                     String selectedCountryCode = countryCodes.get(position);
                                     countryCodeTextView.setText(selectedCountryCode);
-                                }
-
-                                @Override
-                                public void onNothingSelected(AdapterView<?> parent) {
-                                    countryCodeTextView.setText("");
                                 }
                             });
                         }
@@ -221,20 +207,18 @@ public class SignupActivity extends AppCompatActivity {
                 });
     }
 
-
-
+    // Email validation method
     private boolean isValidEmail(String email) {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
+    // Phone number validation method
     private boolean isValidPhoneNumber(String phoneNumber) {
-        // Use a regular expression pattern to validate phone number
-        // 11 digits with a leading zero
         String phoneNumberPattern = "^0[0-9]{10}$";
         return phoneNumber.matches(phoneNumberPattern);
     }
 
-
+    // Username availability check method
     private void checkUsernameAvailability(final String username) {
         db.collection("users")
                 .whereEqualTo("username", username)
@@ -244,45 +228,39 @@ public class SignupActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             if (!task.getResult().isEmpty()) {
-                                // Username already exists
                                 unameEditText.setError("Username already exists");
-
                             } else {
-
                                 unameEditText.setError(null);
                             }
                         } else {
-
                             Toast.makeText(SignupActivity.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
-
+    // Send email verification
     private void sendEmailVerification(FirebaseUser user) {
         user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-
                     Toast.makeText(SignupActivity.this, "Verification email sent. Please check your email.", Toast.LENGTH_SHORT).show();
-                    // Store user details in Firestore
                     storeUserDetails();
                 } else {
-
                     Toast.makeText(SignupActivity.this, "Failed to send verification email: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
+    // Store user details in Firestore
     private void storeUserDetails() {
         String fullName = fullNameEditText.getText().toString().trim();
         String username = unameEditText.getText().toString().trim();
         String email = signUpEmailEditText.getText().toString().trim();
         String phoneNumber = phonenumberEditText.getText().toString().trim();
-        String selectedCountry = countrySpinner.getSelectedItem().toString();
+        String selectedCountry = countryDropdown.getText().toString();
 
         String userId = mAuth.getCurrentUser().getUid();
         DocumentReference userRef = db.collection("users").document(userId);

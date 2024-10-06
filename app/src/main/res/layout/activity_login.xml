@@ -33,33 +33,46 @@
             android:textSize="36dp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/emailEditText"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:background="@drawable/border"
-            android:drawableLeft="@drawable/email"
-            android:drawablePadding="8dp"
             android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:padding="8dp"
-            android:textColor="@color/black" />
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-        <EditText
-            android:id="@+id/passwordEditText"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@null"
+                android:drawableLeft="@drawable/email"
+                android:drawablePadding="8dp"
+                android:inputType="textEmailAddress"
+                android:padding="8dp"
+                android:textColor="@color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="40dp"
-            android:background="@drawable/border"
-            android:drawableLeft="@drawable/lock"
-            android:drawablePadding="8dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:hint="Password"
-            android:inputType="textPassword"
-            android:padding="8dp"
-            android:textColor="@color/black" />
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@null"
+                android:drawableLeft="@drawable/lock"
+                android:drawablePadding="8dp"
+                android:inputType="textPassword"
+                android:padding="8dp"
+                android:textColor="@color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
+            android:id="@+id/forgotPasswordTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
