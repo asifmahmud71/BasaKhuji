@@ -53,27 +53,22 @@ public class TextClassificationViewModel extends ViewModel {
                             }
                             break;
                         default:
-                            // Empty block for handling unknown models
                             break;
                     }
                     return classificationResults;
                 }
             }).get();
         } catch (InterruptedException | ExecutionException e) {
-            // Handle potential exceptions during classification
-            // Return an empty list or throw an exception if needed
         } finally {
-            executor.shutdown(); // Shutdown the executor after use
+            executor.shutdown();
         }
         return results;
     }
 
     private void initClassifier(Context context) {
         BaseOptions.Builder baseOptionsBuilder = BaseOptions.builder();
-        // enable hardware acceleration(optional) when _currentDelegate is on
         switch (_currentDelegate) {
             case DELEGATE_CPU:
-                // Default
                 break;
             case DELEGATE_NNAPI:
                 baseOptionsBuilder.useNnapi();
@@ -90,7 +85,6 @@ public class TextClassificationViewModel extends ViewModel {
                 bertClassifier = BertNLClassifier.createFromFileAndOptions(context, MOBILEBERT, options);
             } catch (IOException e) {
                 e.printStackTrace();
-                // Handle IOException (e.g., log the error, show a message to the user, etc.)
             }
         } else if (_currentModel.equals(WORD_VEC)) {
             try {
@@ -100,7 +94,6 @@ public class TextClassificationViewModel extends ViewModel {
                 nlClassifier = NLClassifier.createFromFileAndOptions(context, WORD_VEC, options);
             } catch (IOException e) {
                 e.printStackTrace();
-                // Handle IOException (e.g., log the error, show a message to the user, etc.)
             }
         }
     }

@@ -108,7 +108,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .addOnFailureListener(this, e -> {
                     Log.e(TAG, "Error getting last known location", e);
                 });
-
         // Fetch properties and add markers
         fetchPropertyMarkers();
     }
