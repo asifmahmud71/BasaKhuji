@@ -67,14 +67,13 @@ public class ChartActivity extends AppCompatActivity {
         setupMonthSpinner();
         setupYearSpinner();
 
-        // Set up the filter button action
+
         filterButton.setOnClickListener(v -> {
             String selectedMonth = monthSpinner.getSelectedItem().toString();
             int selectedYear = Integer.parseInt(yearSpinner.getSelectedItem().toString());
             fetchAndDisplayDataForMonthYear(selectedMonth, selectedYear);
         });
 
-        // Initially display the current month and year data
         Calendar calendar = Calendar.getInstance();
         String currentMonth = new SimpleDateFormat("MMMM", Locale.getDefault()).format(calendar.getTime());
         int currentYear = calendar.get(Calendar.YEAR);
@@ -82,19 +81,16 @@ public class ChartActivity extends AppCompatActivity {
     }
 
     private void setupMonthSpinner() {
-        // Array of month names
         String[] months = new String[]{"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, months);
         monthSpinner.setAdapter(adapter);
 
-        // Set the current month as the default selection
         Calendar calendar = Calendar.getInstance();
         int currentMonthIndex = calendar.get(Calendar.MONTH); // 0-based index
         monthSpinner.setSelection(currentMonthIndex);
     }
 
     private void setupYearSpinner() {
-        // Create a list of the last 10 years
         ArrayList<String> years = new ArrayList<>();
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         for (int i = 0; i < 10; i++) {
@@ -104,7 +100,6 @@ public class ChartActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, years);
         yearSpinner.setAdapter(adapter);
 
-        // Set the current year as the default selection
         yearSpinner.setSelection(0); // 0 means the current year
     }
 
@@ -127,7 +122,6 @@ public class ChartActivity extends AppCompatActivity {
                                     int listingYear = calendar.get(Calendar.YEAR);
                                     int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH); // Get day of month
 
-                                    // Check if the listing matches the selected month and year
                                     if (listingMonth == getMonthFromName(month) && listingYear == year) {
                                         // Manually calculate the week of the month
                                         int weekOfMonth = getWeekFromDay(dayOfMonth);
@@ -152,7 +146,6 @@ public class ChartActivity extends AppCompatActivity {
     private void populateChart(Map<Integer, Integer> weeklyListingsCount) {
         ArrayList<BarEntry> barEntries = new ArrayList<>();
 
-        // Assuming 4 weeks in a month, iterate over the weeks and populate the entries
         for (int week = 1; week <= 4; week++) {
             int count = weeklyListingsCount.getOrDefault(week, 0);  // Default to 0 if no listings for this week
             barEntries.add(new BarEntry(week, count));
@@ -163,23 +156,21 @@ public class ChartActivity extends AppCompatActivity {
         barDataSet.setValueTextColor(Color.BLACK);
         barDataSet.setValueTextSize(16f);
 
-        // Set formatter to remove fractions from bar values
         barDataSet.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                return String.valueOf((int) value); // Cast to integer to remove fractions
+                return String.valueOf((int) value);
             }
         });
 
         BarData barData = new BarData(barDataSet);
 
-        // Decrease the width of the bars
-        barData.setBarWidth(0.6f); // Set the bar width (1.0f is full width, so less than 1.0 reduces the width)
+        barData.setBarWidth(0.6f);
 
         barChart.setData(barData);
         barChart.getDescription().setText("Property Listings by Week");
 
-        barChart.invalidate();  // Refresh the chart
+        barChart.invalidate();
     }
 
     // Helper method to manually calculate the week based on the day of the month

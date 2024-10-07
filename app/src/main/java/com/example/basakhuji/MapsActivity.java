@@ -118,9 +118,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            String subArea = document.getString("subArea"); // Assuming "subArea" is the field name in Firestore
-                            String area = document.getString("area"); // Assuming "area" is the field name in Firestore
-                            String district = document.getString("district"); // Assuming "district" is the field name in Firestore
+                            String subArea = document.getString("subArea");
+                            String area = document.getString("area");
+                            String district = document.getString("district");
 
                             if (subArea != null && area != null && district != null) {
                                 String address = subArea + ", " + area + ", " + district;

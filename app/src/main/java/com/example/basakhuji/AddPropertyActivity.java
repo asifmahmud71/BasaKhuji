@@ -51,8 +51,6 @@ public class AddPropertyActivity extends AppCompatActivity {
     private LinearLayout imagePreview;
     private ArrayList<Uri> imageUris = new ArrayList<>();
     private static final int PICK_IMAGES_REQUEST = 1;
-    private static final int MAX_IMAGES = 4;
-
 
 
     @SuppressLint("MissingInflatedId")
@@ -227,7 +225,7 @@ public class AddPropertyActivity extends AppCompatActivity {
                     property.put("availableMonth", availableMonthSpinner.getSelectedItem().toString());
                     property.put("price", priceEditText.getText().toString().trim() + " BDT");
                     property.put("description", descriptionEditText.getText().toString().trim());
-                    property.put("imageUrl", imageUrls); // Store the list of image URLs
+                    property.put("imageUrl", imageUrls);
                     property.put("userPhone", phoneNumber);
                     property.put("propertyOwner", propertyOwner);
                     property.put("likedBy", new ArrayList<>());
@@ -256,11 +254,6 @@ public class AddPropertyActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Pictures"), PICK_IMAGES_REQUEST);
     }
 
-    private void updateButton() {
-        String myFormat = "dd/MM/yyyy";
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        addedDateTextView.setText(sdf.format(calendar.getTime()));
-    }
 
     // Method to handle image selection result
     @Override

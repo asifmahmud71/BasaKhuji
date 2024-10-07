@@ -104,13 +104,6 @@ public class PropertyDetailsActivity extends AppCompatActivity {
             }
         });
 
-        conlabel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                conTextView.setVisibility(View.VISIBLE);
-            }
-        });
-
 
         // Load property images into the ImageSlider
         ArrayList<SlideModel> slideModels = new ArrayList<>();

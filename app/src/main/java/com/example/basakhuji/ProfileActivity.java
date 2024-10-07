@@ -131,7 +131,6 @@ public class ProfileActivity extends AppCompatActivity{
     }
 
     private void updateUserDetails() {
-        // Get updated user details from EditText fields
         String fullName = fullNameEditText.getText().toString().trim();
         //String email = emailEditText.getText().toString().trim();
         String phoneNumber = phoneNumberEditText.getText().toString().trim();

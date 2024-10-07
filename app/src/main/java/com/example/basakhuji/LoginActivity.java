@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         Button loginButton = findViewById(R.id.loginButton);
-        TextView forgotPasswordTextView = findViewById(R.id.forgotPasswordTextView); // Forgot password text
+        TextView forgotPasswordTextView = findViewById(R.id.forgotPasswordTextView);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,11 +69,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // Forgot Password logic
         forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Show dialog to enter email for password reset
                 showForgotPasswordDialog();
             }
         });
@@ -82,7 +80,6 @@ public class LoginActivity extends AppCompatActivity {
         signUpTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Navigate to the sign-up activity
                 startActivity(new Intent(LoginActivity.this, SignupActivity.class));
             }
         });
@@ -104,16 +101,13 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.putString(EMAIL_KEY, email);
                                 editor.apply();
 
-                                // Proceed to MainActivity
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                 finish();
                             } else {
-                                // If email is not verified, show a toast and don't proceed
                                 Toast.makeText(LoginActivity.this, "Email not verified. Please verify your email.",
                                         Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            // If login fails, show a toast
                             Toast.makeText(LoginActivity.this, "Login failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -122,18 +116,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showForgotPasswordDialog() {
-        // Create an AlertDialog to get the email
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Reset Password");
 
-        // Create an input field
+
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         input.setHint("Enter your email");
 
         builder.setView(input);
 
-        // Set up the buttons
+
         builder.setPositiveButton("Send Reset Link", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

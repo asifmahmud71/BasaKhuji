@@ -44,7 +44,6 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
     public void onBindViewHolder(@NonNull PropertyViewHolder holder, int position) {
         PropertyList property = propertyList.get(position); // Get the property directly based on the position
 
-        // Display property details
         holder.bind(property);
 
         // Set click listener for property image
@@ -72,7 +71,7 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
         }
 
         public void bind(PropertyList property) {
-            // Display property details
+
             String categoryFlatType = property.getCategory() + " " + property.getFlatType();
             categoryFlatTypeTextView.setText(categoryFlatType);
             String location = property.getArea() + ", " + property.getDistrict();

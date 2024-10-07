@@ -192,7 +192,7 @@ public class SignupActivity extends AppCompatActivity {
                     public void accept(Response<CountriesQuery.Data> response) throws Exception {
                         if (response.data() != null) {
                             List<String> countryNames = new ArrayList<>();
-                            final List<String> countryCodes = new ArrayList<>(); // Store country codes
+                            final List<String> countryCodes = new ArrayList<>();
                             for (CountriesQuery.Country country : response.data().countries()) {
                                 countryNames.add(country.name());
                                 countryCodes.add("+" + country.phone());
@@ -283,7 +283,6 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            //Toast.makeText(SignupActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(SignupActivity.this, LoginActivity.class));
                             finish();
                         } else {

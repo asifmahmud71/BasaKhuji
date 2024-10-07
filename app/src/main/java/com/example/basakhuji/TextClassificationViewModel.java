@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel;
 import org.tensorflow.lite.support.label.Category;
 import org.tensorflow.lite.task.core.BaseOptions;
 import org.tensorflow.lite.task.text.nlclassifier.BertNLClassifier;
-import org.tensorflow.lite.task.text.nlclassifier.NLClassifier;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,9 +22,7 @@ public class TextClassificationViewModel extends ViewModel {
     private int _currentDelegate = DELEGATE_CPU;
     private String _currentModel = MOBILEBERT;
 
-    // classifiers
     private BertNLClassifier bertClassifier;
-    private NLClassifier nlClassifier;
 
     private ScheduledExecutorService executor;
 
@@ -41,24 +38,15 @@ public class TextClassificationViewModel extends ViewModel {
                 @Override
                 public List<Float> call() throws Exception {
                     List<Float> classificationResults = new ArrayList<>();
-                    switch (_currentModel) {
-                        case MOBILEBERT:
-                            for (Category category : bertClassifier.classify(text)) {
-                                classificationResults.add(category.getScore());
-                            }
-                            break;
-                        case WORD_VEC:
-                            for (Category category : nlClassifier.classify(text)) {
-                                classificationResults.add(category.getScore());
-                            }
-                            break;
-                        default:
-                            break;
+
+                    for (Category category : bertClassifier.classify(text)) {
+                        classificationResults.add(category.getScore());
                     }
                     return classificationResults;
                 }
             }).get();
         } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         } finally {
             executor.shutdown();
         }
@@ -76,7 +64,6 @@ public class TextClassificationViewModel extends ViewModel {
         }
         BaseOptions baseOptions = baseOptionsBuilder.build();
 
-        // Create the settings for the model by building a classifier object
         if (_currentModel.equals(MOBILEBERT)) {
             try {
                 BertNLClassifier.BertNLClassifierOptions options = BertNLClassifier.BertNLClassifierOptions.builder()
@@ -86,21 +73,10 @@ public class TextClassificationViewModel extends ViewModel {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else if (_currentModel.equals(WORD_VEC)) {
-            try {
-                NLClassifier.NLClassifierOptions options = NLClassifier.NLClassifierOptions.builder()
-                        .setBaseOptions(baseOptions)
-                        .build();
-                nlClassifier = NLClassifier.createFromFileAndOptions(context, WORD_VEC, options);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
     public static final int DELEGATE_CPU = 0;
     public static final int DELEGATE_NNAPI = 1;
-    public static final String WORD_VEC = "wordvec.tflite";
     public static final String MOBILEBERT = "mobilebert.tflite";
 }
-

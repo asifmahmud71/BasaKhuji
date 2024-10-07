@@ -142,7 +142,6 @@ public class RatingActivity extends AppCompatActivity {
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (queryDocumentSnapshots.isEmpty()) {
-                        // User hasn't rated and commented yet, proceed to save
                         CollectionReference ratingsRef = firestore.collection("ratings");
 
                         Map<String, Object> data = new HashMap<>();
@@ -150,7 +149,6 @@ public class RatingActivity extends AppCompatActivity {
                         data.put("rating", rating);
                         data.put("comment", comment);
 
-                        // Call the classify method with the comment text to get positive and negative scores
                         List<Float> results = textClassificationViewModel.classify(comment);
                         float negativeScore = results.isEmpty() ? 0 : results.get(0);
                         float positiveScore = results.size() > 1 ? results.get(1) : 0;
@@ -167,19 +165,16 @@ public class RatingActivity extends AppCompatActivity {
                         ratingsRef.add(data)
                                 .addOnSuccessListener(documentReference -> {
                                     Toast.makeText(this, "Rating and comment saved successfully", Toast.LENGTH_SHORT).show();
-                                    // Refresh ratings and comments after adding a new one
                                     loadRatingsAndComments();
                                 })
                                 .addOnFailureListener(e -> {
                                     Toast.makeText(this, "Failed to save rating and comment: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 });
                     } else {
-                        // User has already rated and commented
                         Toast.makeText(this, "You have already rated and commented", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    // Error occurred while checking for existing ratings and comments
                     Toast.makeText(this, "Failed to check existing ratings and comments: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
 
@@ -199,9 +194,8 @@ public class RatingActivity extends AppCompatActivity {
                         // Calculate the total number of pages based on the number of ratings and comments
                         List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
                         int totalItems = documents.size();
-                        totalPages = (totalItems + 4) / 5; // Round up to the nearest whole number
+                        totalPages = (totalItems + 4) / 5;
 
-                        // Clear the layout before loading new ratings and comments
                         ratingsLayout.removeAllViews();
 
                         // Display ratings and comments for the current page
@@ -278,7 +272,6 @@ public class RatingActivity extends AppCompatActivity {
             textView.setLayoutParams(layoutParams);
 
             if (i == currentPage) {
-                // Set blue color for current page
                 textView.setTextColor(Color.WHITE);
             }
 
