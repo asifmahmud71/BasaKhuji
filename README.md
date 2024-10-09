@@ -8,7 +8,7 @@ This is a simple property rental application that allows users to view property 
 - **Update Profile**: Users can update their profile details such as full name, email, username, and phone number.
 - **Login/Logout**: Users can log in to their account to access the app's features, and they can log out when they're done.
 - **Add Property Listings**: Users can add their property for rent, including details like price, location, and images.
-- **Search and Filter Properties**: Users can search for properties based on various criteria such as price range, location, and number of bedrooms.
+- **Search and Filter Properties**: Users can search for properties based on location.
 - **View Property Details**: Users can view detailed information about each property, including descriptions, amenities, and images.
 - **Contact Property Owners**: Users can contact property owners directly through the app to inquire about listings.
 - **Rate and Review**: Users can leave ratings and reviews for this app.
