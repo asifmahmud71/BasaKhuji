@@ -5,6 +5,11 @@ plugins {
     id 'com.apollographql.apollo' version '2.5.9'
 }
 
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
+def mapsApiKey = localProperties.getProperty("MAPS_API_KEY")
+
 android {
     namespace 'com.example.basakhuji'
     compileSdk 34
@@ -16,6 +21,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "MAPS_API_KEY", "\"${mapsApiKey}\""
     }
 
     buildTypes {
@@ -30,6 +36,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
 
     //GraphQl

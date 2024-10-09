@@ -13,3 +13,12 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Android build files
+*.apk
+*.ap_
+*.dex
+*.class
+.outputs/
+
+
