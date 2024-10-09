@@ -15,6 +15,8 @@ This is a simple property rental application that allows users to view property 
 - **Interactive Map View**: Users can view property locations on an interactive map, allowing for better visualization and accessibility.
 - **Display Property Markers on Map**: Each property is represented by markers on the map.
 - **Chart of Weekly Listings**: Users can view charts displaying weekly property listings organized by month and year.
+- **Reviews Sentiment Analysis**: The application employs MobileBERT sentiment analysis to evaluate user reviews of the application itself, determining if the sentiment expressed is positive or negative.
+
 
 ## Technologies Used
 
